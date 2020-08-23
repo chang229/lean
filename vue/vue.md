@@ -103,3 +103,199 @@ path(oldvode,null);这种方法是错误的
 //通过创建一个注释标签，清空页面上的元素
 path(oldvnode,h('!'))
 ```
+
+#### 模块
+snabbdom的核心库并不能处理元素的属性，样式，事件等，如果要处理的话，可以使用模块；
+常用模块：官方提供了6个模块
+1，attributes:设置DOM元素的属性，使用setAttribute();处理boolean类型的属性；
+2，props:和attributes模块类似，设置DOM元素的属性element[attr] = value;不处理boolean类型的属性；
+3，class:切换类样式；注意：给元素设置类样式是通过sel选择器；
+4，dataset:设置data-*自定义属性；
+5，eventlisteners:注册和移除事件；
+6，style:设置行内样式，支持动画；delayed/remove/destory
+
+模块使用：
+1，导入需要的模块；
+2，init()中注册所需要的模块；
+3，使用h()函数创建vnode的时候，可以把第二个参数设置为对象，其他参数往后移；
+
+```
+import { init,h } from 'snabbdom';
+import style from 'snabbdom/modules/style';
+import eventlisteners from 'snabbdom/modules/eventlisteners';
+
+let path = init([style,eventlisteners]);
+
+let vnode = h('div',{
+    style:{
+        background:'red'
+    },
+    on:{
+        click:() => console.log('click here')
+    }
+},[
+    h('h1','hello world'),
+    h('p','ppppp')
+])
+
+let app = document.getElementById('app');
+
+path(app,vnode)
+```
+
+#### snabbdom源码学习
+如何学习源码：
+1，先宏观了解；2，带着目标看源码；3，看源码的过程要不求甚解；4，调试；5，参考资料；
+snabbdom核心：
+1，使用h()函数创建javascript对象（vnode）描述真实DOM；
+2，init()设置模块，创建patch();
+3,patch()比较两个新旧vnode;
+4,把变化的内容更新到真实DOM上。
+
+#### h()函数
+h()函数介绍：
+在使用vue的时候见过h()函数：
+```
+new Vue({
+    router,
+    store,
+    render:h => h(App)
+}).$mount('#app')
+```
+h()函数最早见于hyperscript,使用javascript创建超文本；
+snabbdom中h()函数不是用来创建超文本，而是创建Vnode;
+
+函数重载的概念：
+1，参数个数或者类型不同的函数；
+2，javascript中没有重载的概念；
+3，Typescript中有重载，不过重载的实现还是通过代码调整参数；
+重载的示意：
+```
+function add(a,b){
+    return a + b;
+};
+function add(a,b,c){
+    return a + b + c;
+};
+add(1,2);
+add(1,2,3);
+```
+
+#### patch的整体过程
+patch(oldvnode,newvnode);
+打补丁，把新节点中变化的内容渲染到真实dom,最后返回新节点作为下一次处理的旧节点；
+对比新旧vnode是否相同节点（节点的key和sel相同）;
+如果不是相同节点，删除之前的内容，重新渲染；
+如果是相同的节点，再判断新的vnode是否有text,如果有并且和oldvnode的text不同，直接更新文本内容；
+如果新的vnode有children,判断子节点是否有变化，判断子节点的过程使用的就是diff算法；
+diff过程只进行同层级的比较；
+
+#### creatElm函数
+1，触发用户钩子函数init;
+2,把vnode转换成dom对象，存储到vnode.elm中，注意此时并没有渲染到页面上；
+2.1,sel是!,创建注释节点；
+2.2,sel不为空,创建对于的dom对象；触发模块的钩子函数crat;创建所有子节点对于的dom对象;触发用户的钩子函数creat;如果vnode有insert钩子函数，追加到队列；
+2.3,sel为空，创建文本节点;
+3,返回vnode.elm;
+
+#### patchVnode函数
+1,触发prepatch钩子函数；
+2,触发update钩子函数；
+3,新节点有text属性，且不等于旧节点的text属性，如果老节点有children属性，移除老节点children对应的dom元素；设置新节点对应dom元素的textcontent;
+4,新老节点都有children，且不相等，调用updateChildren()函数，对比子节点，并且更新子节点的差异；
+5,只有新节点有children属性，如果老节点有text属性，清空对应dom元素的textcontent;添加所以的子节点；
+6,只有老节点有children属性，移除所以的老节点；
+7,只有老节点有text属性,清空对应dom元素的textcontent;
+8,触发postpatch钩子函数;
+
+#### 数据驱动
+数据响应式，双向绑定，数据驱动
+数据响应式：数据模型仅仅是普通的jsvascript对象，而当我们修改数据时，视图会进行更新，避免了繁琐的DOM操作，提高开发效率；
+双向绑定：数据改变，视图改变；视图改变，数据也随之改变；我们可以使用v-model在表单元素上创建双向数据绑定；
+数据驱动是vue最独特的特性之一：开发过程中只需要关注数据本身，不需要关心数据是如何渲染到页面上的。
+
+#### vue响应式核心原理
+vue2.x的核心原理是基于Object.defineProperty;
+vue3.0使用Proxy实现，直接监听对象，而非属性；ES6新增，IE不支持，性能由浏览器优化；
+
+#### 发布订阅者模式
+订阅者，发布者，信号中心；
+假定，存在一个信号中心，某个任务执行完成，就向信号中心'发布（publish）'一个信号，其他任务可以向信号中心'订阅（subscribe）'这个信号，从而知道什么时候自己可以开始执行，这就叫做发布订阅者模式（publish-subscribe pattern）
+```
+class EmmitEvent{
+    constructor(){
+        this.subs = Object.create(null);
+    }
+    $on(attr,fn){
+        this.subs[attr] = this.subs[attr] || [];
+        this.subs[attr].push(fn)
+    }
+    $emit(attr){
+        this.subs[attr] && this.subs[attr].forEach((v) => v())
+    }
+}
+let vm = new EmmitEvent();
+vm.$on('click',() => {
+    console.log('click1')
+});
+vm.$on('click',() => {
+    console.log('click2')
+});
+vm.$emit('click')
+```
+#### 观察者模式
+观察者(订阅者)--watcher:有一个update()方法，当事件发生时，具体要做的事情；
+目标(发布者)--dep:subs数组，存储所有的观察者；addSubs()添加观察者；notify()当事件发生时，调用所有观察者的update()方法；
+没有事件中心；
+```
+class Dep{
+    constructor(){
+        this.subs = [];
+    }
+    addSubs(subs){
+        // subs有update方法才是观察者
+        if(subs && subs.update){
+            this.subs.push(subs)
+        }
+    }
+    notify(){
+        this.subs.forEach((v) => v.update())
+    }
+}
+
+class Watch{
+    update(){
+        console.log('update')
+    }
+}
+
+let dep = new Dep();
+let watcher = new Watch();
+
+dep.addSubs(watcher);
+
+dep.notify();
+```
+#### 发布订阅者模式和观察者模式总结
+观察者模式是由具体目标调度，比如事件触发，dep就会去调用观察者的方法，所以观察者模式的订阅者与发布者之间是存在依赖关系的；
+发布订阅者模式由统一调度中心调用，因此发布者和订阅者不需要知道对方的存在；
+
+#### 实现自己的vue框架
+vue:把data中的成员注入到vue实例，并且把data中的数据转换成getter和setter;
+observer:能够对数据对象的所有属性进行监听，如有变动可拿到最新值并通知DEP;
+
+功能：
+1，接受初始化的参数；
+2，把data中的参数注入vue实例，并转换为getter和setter;
+3,调用observer监听数据的变化；
+4，调用compiler解析指令/差值表达式；
+
+observer:
+1,负责把data选项中的属性转换成响应式数据；
+2,data中的某个属性也是对象，把该属性转换成响应式数据;
+3,数据变化发送通知；
+
+compiler:
+1,负责编译模板，解析指令/差值表达式；
+2,负责页面的首次渲染；
+3,当数据改变时从新渲染页面。
