@@ -6,9 +6,18 @@
     <title>mine vue</title>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <div>{{ msg }} 1234</div>
+        <div>{{ count }}</div>
+        <div v-text="msg"></div>
+        <input type="text" v-model="msg">
+        <input type="text" v-model="count">
+    </div>
 </body>
+<script src="./dep.js"></script>
+<script src="./watcher.js"></script>
 <script src="./observer.js"></script>
+<script src="./compiler.js"></script>
 <script src="./index.js"></script>
 <script>
     let vm = new Vue({
@@ -21,7 +30,7 @@
             }
         }
     });
-    console.log(vm.msg);
-    vm.msg = {name:'vue'};
+    // console.log(vm.msg);
+    // vm.msg = {name:'vue'};
 </script>
 </html>
