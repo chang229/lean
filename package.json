@@ -1,0 +1,27 @@
+{
+  "name": "lean",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lean.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chang229/lean.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chang229/lean/issues"
+  },
+  "homepage": "https://github.com/chang229/lean#readme",
+  "devDependencies": {
+    "folktale": "^2.3.2",
+    "loadsh": "0.0.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
