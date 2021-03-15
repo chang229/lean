@@ -56,7 +56,7 @@ class MyPromise {
 			while (this.errorCallback.length) this.errorCallback.shift()();
 		}
 	};
-	//promise的then方法接受一个successCallback和一个errorCallback方法并返回一个新的promise
+	//promise的then方法接受一个successCallback和一个errorCallback方法
 	then(successCallback, errorCallback) {
 		//判断是否传入回调函数，没有传入则设置默认回调函数
 		successCallback = successCallback ? successCallback : (value) => value;
@@ -154,11 +154,9 @@ class MyPromise {
 		return new MyPromise((resolve) => resolve(value));
 	}
 	// 静态方法rejected
-	static rejected(value) {
-		// 如果value是一个promise对象，则直接返回
-		if (value instanceof MyPromise) return value;
-		// 如果value是一个普通值则保证成为一个promise并返回
-		return new MyPromise((resolve, rejected) => rejected(value));
+	static rejected(reason) {
+		// 直接返回一个promise并执行失败的回调
+		return new MyPromise((resolve, rejected) => rejected(reason));
 	}
 	// 静态方法 all
 	static all(array) {
@@ -195,25 +193,19 @@ class MyPromise {
 	}
 	// 静态方法race
 	static race(array) {
-		let flag = false;
+		// 其中一个成功就直接返回成功
 		return new Promise((resolve, rejected) => {
 			array.forEach((v) => {
 				if (v instanceof MyPromise) {
 					v.then(
 						(res) => {
-							if (flag) return;
-							flag = true;
 							resolve(res);
 						},
 						(reason) => {
-							if (flag) return;
-							flag = true;
 							rejected(reason);
 						}
 					);
 				} else {
-					if (flag) return;
-					flag = true;
 					resolve(v);
 				}
 			});

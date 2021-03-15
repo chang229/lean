@@ -19,9 +19,8 @@
   "homepage": "https://github.com/chang229/lean#readme",
   "devDependencies": {
     "folktale": "^2.3.2",
-    "loadsh": "0.0.4"
-  },
-  "dependencies": {
+    "loadsh": "0.0.4",
     "lodash": "^4.17.21"
-  }
+  },
+  "dependencies": {}
 }
