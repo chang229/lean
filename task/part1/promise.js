@@ -133,9 +133,11 @@ class MyPromise {
 	finall(callback) {
 		return this.then(
 			(value) => {
+				// 调用resolve方法将回调函数返回的返回结果包装成promise对象，并等待它返回
 				return MyPromise.resolve(callback()).then(() => value);
 			},
 			(reason) => {
+				// 调用resolve方法将回调函数返回的返回结果包装成promise对象，并等待它返回
 				return MyPromise.resolve(callback()).then(() => {
 					throw reason;
 				});
