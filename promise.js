@@ -195,25 +195,18 @@ class MyPromise {
 	}
 	// 静态方法race
 	static race(array) {
-		let flag = false;
 		return new Promise((resolve, rejected) => {
 			array.forEach((v) => {
 				if (v instanceof MyPromise) {
 					v.then(
 						(res) => {
-							if (flag) return;
-							flag = true;
 							resolve(res);
 						},
 						(reason) => {
-							if (flag) return;
-							flag = true;
 							rejected(reason);
 						}
 					);
 				} else {
-					if (flag) return;
-					flag = true;
 					resolve(v);
 				}
 			});
