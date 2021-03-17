@@ -146,7 +146,7 @@ class MyPromise {
 	}
 	// promise的catch方法，捕获错误，返回一个promise
 	catch(errorCallback) {
-		return this.then(undefined, (reason) => errorCallback(reason));
+		return this.then(undefined, errorCallback);
 	}
 	// 静态方法resolve
 	static resolve(value) {
