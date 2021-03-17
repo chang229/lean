@@ -135,7 +135,7 @@ class MyPromise {
 	}
 	// promise的rejected方法，该方法是一个静态方法
 	static rejected(value) {
-		return new MyPromise((undefined, rejected) => rejected(value));
+		return new MyPromise((resolve, rejected) => rejected(value));
 	}
 	// promise的all方法，该方法接收一个数组，等到所有异步调用返回之后再返回一个相同顺序的数组返回值
 	static all(array) {
