@@ -90,9 +90,9 @@ class MyPromise {
 	}
 	finall(callback) {
 		return this.then(
-			(res) => MyPromise.race(callback()).then(() => res),
+			(res) => MyPromise.resolve(callback()).then(() => res),
 			(err) =>
-				MyPromise.race(callback()).then(() => {
+				MyPromise.resolve(callback()).then(() => {
 					throw err;
 				})
 		);
