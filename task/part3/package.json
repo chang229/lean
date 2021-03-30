@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "global": "^4.4.0",
+    "zce-cli": "^0.4.0"
+  }
+}
