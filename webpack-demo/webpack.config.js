@@ -1,7 +1,28 @@
 const path = require('path');
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpackDevServer = require('webpack-dev-server');
+
+class Myplugin {
+    apply(compiler){
+        console.log('Myplugin 启动');
+
+        compiler.hooks.emit.tap('Myplugin',(compilation) => {
+            for(const name in compilation.assets){
+                if(name.endsWith('.js')){
+                    const contents = compilation.assets[name].source();
+                    const withoutContents = contents.replace(/\/\*\*+\*\//g, '');
+                    compilation.assets[name] = {
+                        source:() => withoutContents,
+                        size:() => withoutContents.length
+                    }
+                }
+            }
+        })
+    }
+}
 
 module.exports = {
 	entry: './src/index.js',
@@ -39,6 +60,22 @@ module.exports = {
 			},
 		],
 	},
+    devServer:{
+        hot:true,
+        contentBase:'./public',
+        proxy:{
+            '/api':{
+                // http://localhost:8080/api/user => https://api.github.com/api/user
+                target:'https://api.github.com',
+                // http://localhost:8080/api/user => https://api.github.com/user
+                pathRewrite:{
+                    '^api':''
+                },
+                // 不能使用localhost:8080作为请求github的主机名
+                changeoriginal:true
+            }
+        }
+    },
 	plugins: [
 		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
@@ -52,8 +89,10 @@ module.exports = {
 			title: 'about page',
 			filename: 'about.html',
 		}),
-		new CopyWebpackPlugin({
-			patterns: [{ from: 'public' }],
-		}),
+        new webpack.HotModuleReplacementPlugin(),
+		// new CopyWebpackPlugin({
+		// 	patterns: [{ from: 'public' }],
+		// }),
+        // new Myplugin()
 	],
 };
