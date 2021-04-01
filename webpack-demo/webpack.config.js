@@ -6,22 +6,25 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpackDevServer = require('webpack-dev-server');
 
 class Myplugin {
-    apply(compiler){
-        console.log('Myplugin 启动');
+	apply(compiler) {
+		console.log('Myplugin 启动');
 
-        compiler.hooks.emit.tap('Myplugin',(compilation) => {
-            for(const name in compilation.assets){
-                if(name.endsWith('.js')){
-                    const contents = compilation.assets[name].source();
-                    const withoutContents = contents.replace(/\/\*\*+\*\//g, '');
-                    compilation.assets[name] = {
-                        source:() => withoutContents,
-                        size:() => withoutContents.length
-                    }
-                }
-            }
-        })
-    }
+		compiler.hooks.emit.tap('Myplugin', (compilation) => {
+			for (const name in compilation.assets) {
+				if (name.endsWith('.js')) {
+					const contents = compilation.assets[name].source();
+					const withoutContents = contents.replace(
+						/\/\*\*+\*\//g,
+						''
+					);
+					compilation.assets[name] = {
+						source: () => withoutContents,
+						size: () => withoutContents.length,
+					};
+				}
+			}
+		});
+	}
 }
 
 module.exports = {
@@ -60,24 +63,24 @@ module.exports = {
 			},
 		],
 	},
-    devServer:{
-        hot:true,
-        contentBase:'./public',
-        proxy:{
-            '/api':{
-                // http://localhost:8080/api/user => https://api.github.com/api/user
-                target:'https://api.github.com',
-                // http://localhost:8080/api/user => https://api.github.com/user
-                pathRewrite:{
-                    '^api':''
-                },
-                // 不能使用localhost:8080作为请求github的主机名
-                changeoriginal:true
-            }
-        }
-    },
+	devServer: {
+		hot: true,
+		contentBase: './public',
+		proxy: {
+			'/api': {
+				// http://localhost:8080/api/user => https://api.github.com/api/user
+				target: 'https://api.github.com',
+				// http://localhost:8080/api/user => https://api.github.com/user
+				pathRewrite: {
+					'^api': '',
+				},
+				// 不能使用localhost:8080作为请求github的主机名
+				changeoriginal: true,
+			},
+		},
+	},
 	plugins: [
-		new CleanWebpackPlugin(),
+		// new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
 			title: 'index page',
 			mate: {
@@ -89,10 +92,10 @@ module.exports = {
 			title: 'about page',
 			filename: 'about.html',
 		}),
-        new webpack.HotModuleReplacementPlugin(),
+		new webpack.HotModuleReplacementPlugin(),
 		// new CopyWebpackPlugin({
 		// 	patterns: [{ from: 'public' }],
 		// }),
-        // new Myplugin()
+		// new Myplugin()
 	],
 };
