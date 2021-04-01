@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const webpackDevServer = require('webpack-dev-server');
 
 class Myplugin {
 	apply(compiler) {
@@ -33,7 +32,7 @@ module.exports = {
 	output: {
 		filename: 'main.js',
 		path: path.join(__dirname, 'dist'),
-		publicPath: './',
+		// publicPath: './',
 	},
 	module: {
 		rules: [
@@ -64,7 +63,7 @@ module.exports = {
 		],
 	},
 	devServer: {
-		hot: true,
+		// hot: true,
 		contentBase: './public',
 		proxy: {
 			'/api': {
@@ -80,7 +79,7 @@ module.exports = {
 		},
 	},
 	plugins: [
-		// new CleanWebpackPlugin(),
+		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
 			title: 'index page',
 			mate: {
@@ -88,11 +87,7 @@ module.exports = {
 			},
 			template: './index.html',
 		}),
-		new HtmlWebpackPlugin({
-			title: 'about page',
-			filename: 'about.html',
-		}),
-		new webpack.HotModuleReplacementPlugin(),
+		// new webpack.HotModuleReplacementPlugin(),
 		// new CopyWebpackPlugin({
 		// 	patterns: [{ from: 'public' }],
 		// }),
