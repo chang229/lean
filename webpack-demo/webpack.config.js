@@ -2,35 +2,17 @@ const path = require('path');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-class Myplugin {
-	apply(compiler) {
-		console.log('Myplugin 启动');
-
-		compiler.hooks.emit.tap('Myplugin', (compilation) => {
-			for (const name in compilation.assets) {
-				if (name.endsWith('.js')) {
-					const contents = compilation.assets[name].source();
-					const withoutContents = contents.replace(
-						/\/\*\*+\*\//g,
-						''
-					);
-					compilation.assets[name] = {
-						source: () => withoutContents,
-						size: () => withoutContents.length,
-					};
-				}
-			}
-		});
-	}
-}
 
 module.exports = {
 	entry: './src/index.js',
-	mode: 'none',
+	mode: 'production',
 	output: {
-		filename: 'main.js',
+		filename: '[name]-[contenthash:8].main.js',
 		path: path.join(__dirname, 'dist'),
 		// publicPath: './',
 	},
@@ -47,7 +29,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader'],
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 			{
 				test: /\.png$/,
@@ -56,27 +38,11 @@ module.exports = {
 					options: { limit: 102400 },
 				},
 			},
-			{
-				test: /\.md$/,
-				use: './mackdown-loader.js',
-			},
 		],
 	},
 	devServer: {
-		// hot: true,
+		hot: true,
 		contentBase: './public',
-		proxy: {
-			'/api': {
-				// http://localhost:8080/api/user => https://api.github.com/api/user
-				target: 'https://api.github.com',
-				// http://localhost:8080/api/user => https://api.github.com/user
-				pathRewrite: {
-					'^api': '',
-				},
-				// 不能使用localhost:8080作为请求github的主机名
-				changeoriginal: true,
-			},
-		},
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
@@ -85,12 +51,29 @@ module.exports = {
 			mate: {
 				viewport: 'width=device-width, initial-scale=1.0',
 			},
-			template: './index.html',
+			template: './src/index.html',
+            filename:'index.html',
+            chunks:['index']
 		}),
-		// new webpack.HotModuleReplacementPlugin(),
+		new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            webpack_api:JSON.stringify("https://github.com")
+        }),
+        new MiniCssExtractPlugin({
+            filename:'[name]-[contenthash:8].css'
+        }),
 		// new CopyWebpackPlugin({
 		// 	patterns: [{ from: 'public' }],
 		// }),
 		// new Myplugin()
 	],
+    optimization:{
+        splitChunks:{
+            chunks:'all'
+        },
+        minimizer:[
+            new TerserWebpackPlugin(),
+            new OptimizeCssAssetsWebpackPlugin()
+        ]
+    }
 };

@@ -1,14 +1,26 @@
-import createHeading from './heading.js';
-import './index.css'
-import icon from './icon.png';
-import about from './about.md'
+// import posts from './posts/posts'
+// import album from './album/album'
 
-const heading = createHeading();
+const render = () => {
+  const hash = window.location.hash || '#posts'
 
-document.body.append(heading);
+  const mainElement = document.querySelector('.main')
 
-const img = new Image();
-img.src = icon;
-document.body.append(img);
+  mainElement.innerHTML = ''
 
-document.body.append(about)
+  if (hash === '#posts') {
+    // mainElement.appendChild(posts())
+    import(/* webpackChunkName: 'posts' */'./posts/posts').then(({ default: posts }) => {
+      mainElement.appendChild(posts())
+    })
+  } else if (hash === '#album') {
+    // mainElement.appendChild(album())
+    import(/* webpackChunkName: 'album' */'./album/album').then(({ default: album }) => {
+      mainElement.appendChild(album())
+    })
+  }
+}
+
+render()
+
+window.addEventListener('hashchange', render)
