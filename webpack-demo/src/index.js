@@ -1,26 +1,9 @@
-// import posts from './posts/posts'
-// import album from './album/album'
+let btn = document.getElementById('btn');
 
-const render = () => {
-  const hash = window.location.hash || '#posts'
-
-  const mainElement = document.querySelector('.main')
-
-  mainElement.innerHTML = ''
-
-  if (hash === '#posts') {
-    // mainElement.appendChild(posts())
-    import(/* webpackChunkName: 'posts' */'./posts/posts').then(({ default: posts }) => {
-      mainElement.appendChild(posts())
+btn.addEventListener('click',function(){
+    import(/*webpackChunkName:login*/'./login.js').then((name) => {
+        console.log(name);
     })
-  } else if (hash === '#album') {
-    // mainElement.appendChild(album())
-    import(/* webpackChunkName: 'album' */'./album/album').then(({ default: album }) => {
-      mainElement.appendChild(album())
-    })
-  }
-}
+})
 
-render()
-
-window.addEventListener('hashchange', render)
+console.log('index 内容')
