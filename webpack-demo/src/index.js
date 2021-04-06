@@ -1,14 +1,9 @@
-import createHeading from './heading.js';
-import './index.css'
-import icon from './icon.png';
-import about from './about.md'
+let btn = document.getElementById('btn');
 
-const heading = createHeading();
+btn.addEventListener('click',function(){
+    import(/*webpackChunkName:login*/'./login.js').then((name) => {
+        console.log(name);
+    })
+})
 
-document.body.append(heading);
-
-const img = new Image();
-img.src = icon;
-document.body.append(img);
-
-document.body.append(about)
+console.log('index 内容')
