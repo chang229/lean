@@ -14,11 +14,27 @@ class Hook{
         this._insert(options);
     }
 
+    tapAsync(options,fn){
+        if(typeof options === 'string'){
+            options = {name:options}
+        }
+        options = Object.assign({fn},options); // options = {fn:fn,name:name}
+        // 调用_insert方法将组装好的options添加进taps
+        this._insert(options);
+    }
+
     _insert(options){
         this.taps[this.taps.length] = options;
     }
 
     call(...args){
+        // 创建将来要具体执行的函数代码结构
+        let callFn = this._createCall();
+        // 调用上述的函数（args传入进去）
+        return callFn.apply(this,args);
+    }
+
+    callAsync(...args){
         // 创建将来要具体执行的函数代码结构
         let callFn = this._createCall();
         // 调用上述的函数（args传入进去）
