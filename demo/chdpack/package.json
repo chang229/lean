@@ -1,0 +1,9 @@
+{
+	"name": "chdpack",
+	"version": "1.0.0",
+	"main": "./lib/webpack.js",
+	"license": "MIT",
+	"devDependencies": {
+		"tapable": "1"
+	}
+}
