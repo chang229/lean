@@ -165,23 +165,14 @@
     jsonpArray.push = webpackJsonpCallback;
 
     // 执行__webpack_require__方法，执行模块导入与加载操作
-    return __webpack_require__(__webpack_require__.s = './src/index.js')
+    return __webpack_require__(__webpack_require__.s = '<%-entryModuleId%>')
 })({
-    
-        "./src/index.js":
+    <%for(let module of modules){%>
+        "<%-module.moduleId%>":
         /*! no static exports found */
         (function(module, exports, __webpack_require__) {
-            const title = __webpack_require__("./src/title.js");
-
-console.log('index');
-console.log(title);
+            <%-module._source%>
         }),
-    
-        "./src/title.js":
-        /*! no static exports found */
-        (function(module, exports, __webpack_require__) {
-            module.exports = 'title';
-        }),
-    
+    <%}%>
     
 })
