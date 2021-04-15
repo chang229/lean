@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     entry:'./src/main.js',
@@ -20,12 +21,12 @@ module.exports = {
             {
                 test:/\.js$/,
                 exclude: /node_modules/,
-                use:[{
+                use:{
                     loader:'babel-loader',
                     options:{
                         presets:['@babel/preset-env']
                     }
-                }]
+                }
             },
             {
                 test:/\.less$/,
@@ -37,14 +38,12 @@ module.exports = {
             },
             {
                 test:/\.(jpg|png|jpeg|gif)$/,
-                use:[
-                    {
+                use:{
                         loader:'url-loader',
                         options:{
                             limit:10240
                         }
                     }
-                ]
             },
             {
                 test:/\.(ttf|eot|svg|woff|woff2)$/,
@@ -55,7 +54,28 @@ module.exports = {
     plugins:[
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
-            template:'./public/index.html'
+            filename: 'index.html',
+            title:'index',
+            template: './public/index.html',
+            url: './',  //需要这里传参
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+            }
         }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.posix.join(
+                        path.resolve(__dirname, "public").replace(/\\/g, "/"),
+                        "**/*"
+                    ),
+                    globOptions: {
+                        ignore:['*.html']
+                    }
+                }
+            ],
+        })
     ]
 }
