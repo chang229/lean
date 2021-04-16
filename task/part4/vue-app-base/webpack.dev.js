@@ -9,7 +9,6 @@ module.exports = merge(common, {
 		hotOnly: true,
 		open: true,
 		port: '1234',
-		inline: true,
 		contentBase: './public',
 	},
 	target: 'web',

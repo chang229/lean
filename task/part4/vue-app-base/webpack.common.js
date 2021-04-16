@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: './src/main.js',
 	output: {
-		filename: '[name]-[contenthash:5].js',
+		filename: 'js/[name]-[contenthash:5].js',
 		path: path.resolve('dist'),
 		assetModuleFilename: 'images/[hash][ext][query]',
 	},
@@ -27,11 +28,11 @@ module.exports = {
 			},
 			{
 				test: /\.less$/,
-				use: ['style-loader', 'css-loader', 'less-loader'],
+				use: [process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader'],
+				use: [process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 			{
 				test: /\.(jpg|png|jpeg|gif)$/,
@@ -45,9 +46,6 @@ module.exports = {
 	},
 	plugins: [
 		new VueLoaderPlugin(),
-		// new MiniCssExtractPlugin({
-		// 	filename: 'css/[name]-[contenthash:5].css',
-		// }),
 		new HtmlWebpackPlugin({
 			filename: 'index.html',
 			title: 'index',
