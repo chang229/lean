@@ -36,5 +36,11 @@ module.exports = merge(common, {
             new TerserWebpackPlugin(),
             new CssMinimizerPlugin(),
         ],
+        usedExports:true,
+        concatenateModules:true,
+        minimize:true,
+        splitChunks: {
+            chunks: 'all'
+        }
     },
 });
