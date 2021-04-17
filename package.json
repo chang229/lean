@@ -18,6 +18,11 @@
   },
   "homepage": "https://github.com/chang229/lean#readme",
   "devDependencies": {
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
     "folktale": "^2.3.2",
     "loadsh": "0.0.4",
     "lodash": "^4.17.21"
