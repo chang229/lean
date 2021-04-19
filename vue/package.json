@@ -1,0 +1,57 @@
+{
+  "name": "yz_doctors",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "preserve": "webpack --config ./webpack.skeleton.conf.js && node skeleton.js",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "iview": "^3.1.5",
+    "register-service-worker": "^1.0.0",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.1.1",
+    "@vue/cli-plugin-eslint": "^3.1.5",
+    "@vue/cli-plugin-pwa": "^3.1.2",
+    "@vue/cli-service": "^3.1.4",
+    "@vue/eslint-config-prettier": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-import": "^1.11.0",
+    "css-loader": "^1.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0-0",
+    "html-minifier": "^3.5.21",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.0.5",
+    "node-sass": "^4.10.0",
+    "qs": "^6.6.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.23.1",
+    "vue-loader": "^15.4.2",
+    "vue-server-renderer": "^2.5.17",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}
