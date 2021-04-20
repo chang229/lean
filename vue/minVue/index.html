@@ -1,37 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div id="app">hello world</div>
-</body>
-<script>
-    let data = {
-        msg:'hello',
-        count:10,
-    };
-    let vm = {};
-    Object.keys(data).forEach((v) => {
-        Object.defineProperty(vm,v,{
-            enumerable:true,
-            configurable:true,
-            get(){
-                console.log('get');
-                return data[v]
-            },
-            set(value){
-                console.log('set:' + value);
-                if(value === data[v]) return;
-                data[v] = value;
-                document.getElementById('app').innerHTML = value
-            }
-        })
-    })
-    vm.msg = 'hello world';
-    console.log(vm.msg)
-</script>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="app"></div>
+	</body>
+	<script src="./observer.js"></script>
+	<script src="./vue.js"></script>
+	<script>
+		let vm = new Vue({
+			el: '#app',
+			data: {
+				msg: 'hello world',
+				count: 100,
+			},
+		});
+	</script>
 </html>
