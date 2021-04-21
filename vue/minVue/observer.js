@@ -15,12 +15,16 @@ class Observer {
     // 此处会形成闭包，所有value的值并不会被垃圾回收机制处理掉
 	defineReactive(obj, key, value) {
         let that = this;
+        // 负责收集依赖并发送通知
+        let dep = new Dep();
         // 如果value是对象，则把value内部的属性也转换成响应式数据
         this.walk(value);
 		Object.defineProperty(obj, key, {
 			enumerable: true,
 			configurable: true,
 			get() {
+                // 收集依赖
+                Dep.target && dep.addSub(Dep.target);
 				return value;
 			},
 			set(newValue) {
@@ -29,6 +33,7 @@ class Observer {
                 // 如果newValue是对象，则把newValue内部的属性转换成响应式数据
                 that.walk(newValue);
 				// 发送通知
+                dep.notify()
 			},
 		});
 	}

@@ -40,15 +40,26 @@ class Compiler {
 	}
 	update(node, key, attrName) {
 		let updateFn = this[attrName + 'Update'];
-		updateFn && updateFn(node, this.vm[key]);
+        // 调用call方法将updateFn执行时的this指向当前compiler对象
+		updateFn && updateFn.call(this,node, this.vm[key],key);
 	}
 	// 处理v-text指令
-	textUpdate(node, value) {
+	textUpdate(node, value,key) {
 		node.textContent = value;
+        new Watcher(this.vm,key,(newValue) => {
+            node.textContent = newValue;
+        })
 	}
 	// 处理v-model指令
-	modelUpdate(node, value) {
+	modelUpdate(node, value,key) {
 		node.value = value;
+        new Watcher(this.vm,key,(newValue) => {
+            node.value = newValue;
+        })
+        //给node添加input事件，实现双向数据绑定
+        node.addEventListener('input',() => {
+            this.vm[key] = node.value;
+        })
 	}
 	// 编译文本节点，处理差值表达式
 	compileText(node) {
@@ -59,6 +70,10 @@ class Compiler {
 		if (reg.test(value)) {
 			let key = RegExp.$1.trim();
 			node.textContent = value.replace(reg, this.vm[key]);
+
+            new Watcher(this.vm,key,(newValue) => {
+                node.textContent = newValue;
+            })
 		}
 	}
 	// 判断元素属性是否是指令
