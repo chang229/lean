@@ -8,7 +8,7 @@ class Vue {
 				: options.el;
 		this._proxyData(this.$data);
 		new Observer(this.$data);
-		new Compiler(this);
+		new Compile(this);
 	}
 	_proxyData(data) {
 		Object.keys(data).forEach((key) => {
