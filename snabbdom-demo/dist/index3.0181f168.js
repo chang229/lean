@@ -681,24 +681,263 @@ function h(sel, b, c) {
 }
 
 ;
-},{"./vnode.js":"node_modules/snabbdom/build/package/vnode.js","./is.js":"node_modules/snabbdom/build/package/is.js"}],"src/index.js":[function(require,module,exports) {
+},{"./vnode.js":"node_modules/snabbdom/build/package/vnode.js","./is.js":"node_modules/snabbdom/build/package/is.js"}],"node_modules/snabbdom/build/package/modules/style.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styleModule = void 0;
+// Bindig `requestAnimationFrame` like this fixes a bug in IE/Edge. See #360 and #409.
+var raf = typeof window !== 'undefined' && window.requestAnimationFrame.bind(window) || setTimeout;
+
+var nextFrame = function (fn) {
+  raf(function () {
+    raf(fn);
+  });
+};
+
+var reflowForced = false;
+
+function setNextFrame(obj, prop, val) {
+  nextFrame(function () {
+    obj[prop] = val;
+  });
+}
+
+function updateStyle(oldVnode, vnode) {
+  var cur;
+  var name;
+  var elm = vnode.elm;
+  var oldStyle = oldVnode.data.style;
+  var style = vnode.data.style;
+  if (!oldStyle && !style) return;
+  if (oldStyle === style) return;
+  oldStyle = oldStyle || {};
+  style = style || {};
+  var oldHasDel = ('delayed' in oldStyle);
+
+  for (name in oldStyle) {
+    if (!style[name]) {
+      if (name[0] === '-' && name[1] === '-') {
+        elm.style.removeProperty(name);
+      } else {
+        elm.style[name] = '';
+      }
+    }
+  }
+
+  for (name in style) {
+    cur = style[name];
+
+    if (name === 'delayed' && style.delayed) {
+      for (const name2 in style.delayed) {
+        cur = style.delayed[name2];
+
+        if (!oldHasDel || cur !== oldStyle.delayed[name2]) {
+          setNextFrame(elm.style, name2, cur);
+        }
+      }
+    } else if (name !== 'remove' && cur !== oldStyle[name]) {
+      if (name[0] === '-' && name[1] === '-') {
+        elm.style.setProperty(name, cur);
+      } else {
+        elm.style[name] = cur;
+      }
+    }
+  }
+}
+
+function applyDestroyStyle(vnode) {
+  var style;
+  var name;
+  var elm = vnode.elm;
+  var s = vnode.data.style;
+  if (!s || !(style = s.destroy)) return;
+
+  for (name in style) {
+    elm.style[name] = style[name];
+  }
+}
+
+function applyRemoveStyle(vnode, rm) {
+  var s = vnode.data.style;
+
+  if (!s || !s.remove) {
+    rm();
+    return;
+  }
+
+  if (!reflowForced) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    vnode.elm.offsetLeft;
+    reflowForced = true;
+  }
+
+  var name;
+  var elm = vnode.elm;
+  var i = 0;
+  var compStyle;
+  var style = s.remove;
+  var amount = 0;
+  var applied = [];
+
+  for (name in style) {
+    applied.push(name);
+    elm.style[name] = style[name];
+  }
+
+  compStyle = getComputedStyle(elm);
+  var props = compStyle['transition-property'].split(', ');
+
+  for (; i < props.length; ++i) {
+    if (applied.indexOf(props[i]) !== -1) amount++;
+  }
+
+  elm.addEventListener('transitionend', function (ev) {
+    if (ev.target === elm) --amount;
+    if (amount === 0) rm();
+  });
+}
+
+function forceReflow() {
+  reflowForced = false;
+}
+
+const styleModule = {
+  pre: forceReflow,
+  create: updateStyle,
+  update: updateStyle,
+  destroy: applyDestroyStyle,
+  remove: applyRemoveStyle
+};
+exports.styleModule = styleModule;
+},{}],"node_modules/snabbdom/build/package/modules/eventlisteners.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.eventListenersModule = void 0;
+
+function invokeHandler(handler, vnode, event) {
+  if (typeof handler === 'function') {
+    // call function handler
+    handler.call(vnode, event, vnode);
+  } else if (typeof handler === 'object') {
+    // call multiple handlers
+    for (var i = 0; i < handler.length; i++) {
+      invokeHandler(handler[i], vnode, event);
+    }
+  }
+}
+
+function handleEvent(event, vnode) {
+  var name = event.type;
+  var on = vnode.data.on; // call event handler(s) if exists
+
+  if (on && on[name]) {
+    invokeHandler(on[name], vnode, event);
+  }
+}
+
+function createListener() {
+  return function handler(event) {
+    handleEvent(event, handler.vnode);
+  };
+}
+
+function updateEventListeners(oldVnode, vnode) {
+  var oldOn = oldVnode.data.on;
+  var oldListener = oldVnode.listener;
+  var oldElm = oldVnode.elm;
+  var on = vnode && vnode.data.on;
+  var elm = vnode && vnode.elm;
+  var name; // optimization for reused immutable handlers
+
+  if (oldOn === on) {
+    return;
+  } // remove existing listeners which no longer used
+
+
+  if (oldOn && oldListener) {
+    // if element changed or deleted we remove all existing listeners unconditionally
+    if (!on) {
+      for (name in oldOn) {
+        // remove listener if element was changed or existing listeners removed
+        oldElm.removeEventListener(name, oldListener, false);
+      }
+    } else {
+      for (name in oldOn) {
+        // remove listener if existing listener removed
+        if (!on[name]) {
+          oldElm.removeEventListener(name, oldListener, false);
+        }
+      }
+    }
+  } // add new listeners which has not already attached
+
+
+  if (on) {
+    // reuse existing listener or create new
+    var listener = vnode.listener = oldVnode.listener || createListener(); // update vnode for listener
+
+    listener.vnode = vnode; // if element changed or added we add all needed listeners unconditionally
+
+    if (!oldOn) {
+      for (name in on) {
+        // add listener if element was changed or new listeners added
+        elm.addEventListener(name, listener, false);
+      }
+    } else {
+      for (name in on) {
+        // add listener if new listener added
+        if (!oldOn[name]) {
+          elm.addEventListener(name, listener, false);
+        }
+      }
+    }
+  }
+}
+
+const eventListenersModule = {
+  create: updateEventListeners,
+  update: updateEventListeners,
+  destroy: updateEventListeners
+};
+exports.eventListenersModule = eventListenersModule;
+},{}],"src/index3.js":[function(require,module,exports) {
 "use strict";
 
 var _init = require("snabbdom/build/package/init");
 
 var _h = require("snabbdom/build/package/h");
 
-var path = (0, _init.init)([]); // h函数第一个参数是标签加选择器
-// 第二个参数是文本内容
+var _style = require("snabbdom/build/package/modules/style");
 
-var vNode = (0, _h.h)('div#container', 'hello world');
-var app = document.querySelector('#app'); // path函数第一次参数是oldVnode，也可以是一个dom
-// 第二个参数是一个vnode
+var _eventlisteners = require("snabbdom/build/package/modules/eventlisteners");
 
-var oldVnode = path(app, vNode);
-vNode = (0, _h.h)('div#dom', 'hello snabbdom');
-path(oldVnode, vNode);
-},{"snabbdom/build/package/init":"node_modules/snabbdom/build/package/init.js","snabbdom/build/package/h":"node_modules/snabbdom/build/package/h.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+// 导入模块
+// 注册模块
+var path = (0, _init.init)([_style.styleModule, _eventlisteners.eventListenersModule]); // 使用模块
+
+var vnode = (0, _h.h)('div#container', [(0, _h.h)('h1', {
+  style: {
+    backgroundColor: 'red'
+  }
+}, 'hello world'), (0, _h.h)('p', {
+  on: {
+    click: handleClick
+  }
+}, '这是一个p标签')]);
+
+function handleClick() {
+  console.log('888');
+}
+
+var app = document.querySelector('#app');
+path(app, vnode);
+},{"snabbdom/build/package/init":"node_modules/snabbdom/build/package/init.js","snabbdom/build/package/h":"node_modules/snabbdom/build/package/h.js","snabbdom/build/package/modules/style":"node_modules/snabbdom/build/package/modules/style.js","snabbdom/build/package/modules/eventlisteners":"node_modules/snabbdom/build/package/modules/eventlisteners.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -902,5 +1141,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index.js"], null)
-//# sourceMappingURL=/src.a2b27638.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index3.js"], null)
+//# sourceMappingURL=/index3.0181f168.js.map

@@ -681,23 +681,25 @@ function h(sel, b, c) {
 }
 
 ;
-},{"./vnode.js":"node_modules/snabbdom/build/package/vnode.js","./is.js":"node_modules/snabbdom/build/package/is.js"}],"src/index.js":[function(require,module,exports) {
+},{"./vnode.js":"node_modules/snabbdom/build/package/vnode.js","./is.js":"node_modules/snabbdom/build/package/is.js"}],"src/index2.js":[function(require,module,exports) {
 "use strict";
 
 var _init = require("snabbdom/build/package/init");
 
 var _h = require("snabbdom/build/package/h");
 
-var path = (0, _init.init)([]); // h函数第一个参数是标签加选择器
-// 第二个参数是文本内容
-
-var vNode = (0, _h.h)('div#container', 'hello world');
-var app = document.querySelector('#app'); // path函数第一次参数是oldVnode，也可以是一个dom
-// 第二个参数是一个vnode
-
-var oldVnode = path(app, vNode);
-vNode = (0, _h.h)('div#dom', 'hello snabbdom');
-path(oldVnode, vNode);
+var path = (0, _init.init)([]);
+var vnode = (0, _h.h)('div#container', [(0, _h.h)('h1', 'hello world'), (0, _h.h)('p', '这是一个p标签')]);
+var app = document.querySelector('#app');
+var oldVnode = path(app, vnode);
+setTimeout(function () {
+  // vnode = h('div#container',[
+  //     h('h1','hello snabbdom'),
+  //     h('p','suabbdom')
+  // ])
+  // path(oldVnode,vnode)
+  path(oldVnode, (0, _h.h)('!'));
+}, 2000);
 },{"snabbdom/build/package/init":"node_modules/snabbdom/build/package/init.js","snabbdom/build/package/h":"node_modules/snabbdom/build/package/h.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -902,5 +904,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index.js"], null)
-//# sourceMappingURL=/src.a2b27638.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index2.js"], null)
+//# sourceMappingURL=/index2.943df8ae.js.map
