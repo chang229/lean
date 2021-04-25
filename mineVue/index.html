@@ -13,6 +13,14 @@
 			<h3>{{ count }}</h3>
 			<h1>v-text</h1>
 			<div v-text="msg"></div>
+			<h1>v-html</h1>
+			<div v-html="html"></div>
+			<h1>v-on</h1>
+			<div v-on:click="fatherClick">
+				<p>p</p>
+				<div v-on:click="handelClick">点击</div>
+				<div @click="handelClick">点击</div>
+			</div>
 			<h1>v-model</h1>
 			<input type="text" v-model="msg" />
 			<input type="text" v-model="count" />
@@ -27,9 +35,16 @@
 		let vm = new Vue({
 			data: {
 				msg: 'hello world',
-				count: 100,
+				count: 10,
+				html: '<span style="color:red">html</span>',
 			},
 			el: '#app',
 		});
+		function fatherClick() {
+			console.log('father');
+		}
+		function handelClick() {
+			console.log('click');
+		}
 	</script>
 </html>
