@@ -7,7 +7,7 @@ import { h } from 'snabbdom/build/package/h';
 
 var patch = init([classModule, propsModule, styleModule, eventListenersModule]);
 
-var vnode;
+const vnode;
 
 var nextKey = 11;
 var margin = 8;

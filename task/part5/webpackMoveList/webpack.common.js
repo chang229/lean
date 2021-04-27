@@ -30,6 +30,8 @@ module.exports = {
 			filename: 'index.html',
 			template: './index.html',
 			minify: {
+                removeComments: true,
+				collapseWhitespace: true,
 				minifyCSS: true,
 				minifyJS: true,
 				removeAttributeQuotes: true,

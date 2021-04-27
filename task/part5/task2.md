@@ -8,59 +8,8 @@ Diff 策略：
 
 基于上述两点策略，虚拟 DOM 的 diff 算法的复杂的从 O(n^3)降到了 O(n);
 
-执行过程：
 
--   在对开始和结束节点比较的时候，总共有四种情况
-
-1.oldStartVnode / newStartVnode (旧开始节点 / 新开始节点)
-
-2.oldEndVnode / newEndVnode (旧结束节点 / 新结束节点)
-
-3.oldStartVnode / newEndVnode (旧开始节点 / 新结束节点)
-
-4.oldEndVnode / newStartVnode (旧结束节点 / 新开始节点)
-
--   开始和结束节点
-    如果新旧开始节点是 sameVnode(key 和 sel 相同)
-
-    1.调用 patchVnode()对比和更新节点;
-
-    2.把旧开始和新开始索引往后移动：oldStartIdx ++ newStartIdx ++;
-
--   旧开始节点 / 新结束节点
-
-1.调用 patchVnode()对比和更新节点；
-
-2.把 oldStartVnode 对应的 DOM 元素，移动到右边，更新索引
-
--   旧结束节点 / 新开始节点
-
-1.调用 patchVnode()对比和更新节点；
-
-2.把 oldEndVnode 对应的 DOM 元素，移动到左边，更新索引；
-
--   非上述四种情况
-
-1.遍历新节点，使用 newStartNode 的 key 在老节点数组中找相同节点；
-
-2.如果没有找到，说明 newStartNode 是新节点；创建新节点对应的 DOM 元素，插入到 DOM 树中；
-
-3.如果找到了：
-（1）判断新节点和找到的老节点的 sel 选择器是否相同；
-（2）如果不同，说明节点被修改了，重新创建对应的 DOM 元素，插入 DOM 树中；
-（3）如果相同，把 elmToMove 对应的 DOM 元素，移动到左边；
-
--   循环结束
-
-1.当老节点的所有子节点先遍历完（oldStartIdx > oldEndIdx）,循环结束
-
-2.新节点的所有子节点先遍历完（newStartIdx > newEndIdx）,循环结束
-
-3.如果老节点的数组先遍历完（oldStartIdx > oldEndIdx）,说明新节点有剩余，把剩余节点批量插入到右边
-
-4.如果新节点的数组先遍历完（newStartIdx > newEndIdx）,说明老节点有剩余，把剩余节点批量删除
-
-#####
+执行过程
 
 1.首先定义 oldStartIdx、newStartIdx、oldEndIdx 以及 newEndIdx 分别是新老两个 VNode 的两边的索引。
 
