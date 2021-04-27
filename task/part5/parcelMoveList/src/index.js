@@ -5,15 +5,15 @@ import { styleModule } from 'snabbdom/build/package/modules/style';
 import { eventListenersModule } from 'snabbdom/build/package/modules/eventlisteners';
 import { h } from 'snabbdom/build/package/h';
 
-var patch = init([classModule, propsModule, styleModule, eventListenersModule]);
+let patch = init([classModule, propsModule, styleModule, eventListenersModule]);
 
-const vnode;
+let vnode;
 
-var nextKey = 11;
-var margin = 8;
-var sortBy = 'rank';
-var totalHeight = 0;
-var originalData = [
+let nextKey = 11;
+let margin = 8;
+let sortBy = 'rank';
+let totalHeight = 0;
+let originalData = [
 	{
 		rank: 1,
 		title: 'The Shawshank Redemption',
@@ -85,18 +85,7 @@ var originalData = [
 		elmHeight: 0,
 	},
 ];
-var data = [
-	originalData[0],
-	originalData[1],
-	originalData[2],
-	originalData[3],
-	originalData[4],
-	originalData[5],
-	originalData[6],
-	originalData[7],
-	originalData[8],
-	originalData[9],
-];
+var data = [...originalData];
 
 function changeSort(prop) {
 	sortBy = prop;
@@ -128,37 +117,6 @@ function remove(movie) {
 	render();
 }
 
-function movieView(movie) {
-	return h(
-		'div.row',
-		{
-			key: movie.rank,
-			style: {
-				opacity: '0',
-				transform: 'translate(-200px)',
-				delayed: {
-					transform: `translateY(${movie.offset}px)`,
-					opacity: '1',
-				},
-				remove: {
-					opacity: '0',
-					transform: `translateY(${movie.offset}px) translateX(200px)`,
-				},
-			},
-			hook: {
-				insert: (vnode) => {
-					movie.elmHeight = vnode.elm.offsetHeight;
-				},
-			},
-		},
-		[
-			h('div', { style: { fontWeight: 'bold' } }, movie.rank),
-			h('div', movie.title),
-			h('div', movie.desc),
-			h('div.btn.rm-btn', { on: { click: () => remove(movie) } }, 'x'),
-		]
-	);
-}
 
 function render() {
 	data = data.reduce((acc, m) => {
@@ -172,50 +130,85 @@ function render() {
 			: data[data.length - 1].offset + data[data.length - 1].elmHeight;
 	vnode = patch(vnode, view(data));
 }
-
-function view(data) {
+// 创建电影列表
+function movieList(data) {
+	return h(
+		'div.list',
+		data.map((v, i) =>
+			h(
+				'div.row',
+				{
+					key: v.rank,
+					style: {
+						opacity: '0',
+						transform: 'translate(-200px)',
+						delayed: {
+							transform: `translateY(${v.offset}px)`,
+							opacity: '1',
+						},
+						remove: {
+							opacity: '0',
+							transform: `translateY(${v.offset}px) translateX(200px)`,
+						},
+					},
+					hook: {
+						insert: (vnode) => {
+							v.elmHeight = vnode.elm.offsetHeight;
+						},
+					},
+				},
+				[
+					h('div', { style: { fontWeight: 'bold' } }, v.rank),
+					h('div', v.title),
+					h('div', v.desc),
+					h(
+						'div.btn.rm-btn',
+						{ on: { click: () => remove(v) } },
+						'x'
+					),
+				]
+			)
+		)
+	);
+}
+// 创建操作按钮
+function btnVnode() {
 	return h('div', [
-		h('h1', 'Top 10 movies'),
-		h('div', [
-			h('a.btn.add', { on: { click: add } }, 'Add'),
-			'Sort by: ',
-			h('span.btn-group', [
-				h(
-					'a.btn.rank',
-					{
-						class: { active: sortBy === 'rank' },
-						on: { click: () => changeSort('rank') },
-					},
-					'Rank'
-				),
-				h(
-					'a.btn.title',
-					{
-						class: { active: sortBy === 'title' },
-						on: { click: () => changeSort('title') },
-					},
-					'Title'
-				),
-				h(
-					'a.btn.desc',
-					{
-						class: { active: sortBy === 'desc' },
-						on: { click: () => changeSort('desc') },
-					},
-					'Description'
-				),
-			]),
+		'Sort by: ',
+		h('span.btn-group', [
+			h(
+				'a.btn.rank',
+				{
+					class: { active: sortBy === 'rank' },
+					on: { click: () => changeSort('rank') },
+				},
+				'Rank'
+			),
+			h(
+				'a.btn.title',
+				{
+					class: { active: sortBy === 'title' },
+					on: { click: () => changeSort('title') },
+				},
+				'Title'
+			),
+			h(
+				'a.btn.desc',
+				{
+					class: { active: sortBy === 'desc' },
+					on: { click: () => changeSort('desc') },
+				},
+				'Description'
+			),
 		]),
-		h(
-			'div.list',
-			{ style: { height: totalHeight + 'px' } },
-			data.map(movieView)
-		),
+		h('a.btn.add', { on: { click: add } }, 'Add'),
 	]);
 }
+// 创建标题的vnode
+function view(data) {
+	return h('div', [h('h1', 'TOP 10 Movies'), btnVnode(), movieList(data)]);
+}
 
-window.addEventListener('DOMContentLoaded', () => {
-	var container = document.getElementById('container');
-	vnode = patch(container, view(data));
-	render();
-});
+let container = document.getElementById('container');
+vnode = patch(container, view(data));
+render();
