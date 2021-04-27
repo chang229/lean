@@ -28,7 +28,7 @@ let vm = new Vue({
     },
     method: {
         clickHandler () {
-            let newDog = Object.assing({},this.dog,{name:'Trump'});
+            let newDog = Object.assign({},this.dog,{name:'Trump'});
             // 为dog属性重新赋值一个新对象，此时dog的新成员是响应式的
             this.dog = newDog;
         }
