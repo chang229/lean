@@ -33,13 +33,13 @@
 	<script src="./vue.js"></script>
 	<script>
 		let vm = new Vue({
+			el: '#app',
 			data: {
 				msg: 'hello world',
 				count: 10,
 				html: '<span style="color:red">html</span>',
 			},
-			el: '#app',
-			methods: {
+			method: {
 				handelClick(event) {
 					console.log('click');
 				},

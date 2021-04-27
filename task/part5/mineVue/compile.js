@@ -2,7 +2,7 @@ class Compiler {
 	constructor(vm) {
 		this.vm = vm;
 		this.el = vm.$el;
-		this.methods = vm.methods;
+		this.method = vm.method;
 		this.compile(this.el);
 	}
 	compile(el) {
@@ -74,7 +74,7 @@ class Compiler {
 		let eventArr = attrName.split('.');
 		eventType = eventArr.shift();
 		node.addEventListener(eventType, (e) => {
-			this.methods[value]();
+			this.method[value]();
 			if (eventArr.indexOf('stop') > -1) {
 				e.stopPropagation();
 			}

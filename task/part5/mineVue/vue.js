@@ -4,8 +4,8 @@ class Vue {
 		this.$options = options || {};
 		// 缓存options中的data
 		this.$data = options.data || {};
-		// 缓存options中的methods
-		this.methods = options.methods;
+		// 缓存options中的method
+		this.method = options.method;
 		// 将data中的属性转换为get/set，并挂载到vue实例上
 		this._proxyData(this.$data);
 		// 挂载el
