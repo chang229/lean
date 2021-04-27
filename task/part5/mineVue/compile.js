@@ -2,6 +2,7 @@ class Compiler {
 	constructor(vm) {
 		this.vm = vm;
 		this.el = vm.$el;
+		this.methods = vm.methods;
 		this.compile(this.el);
 	}
 	compile(el) {
@@ -72,20 +73,15 @@ class Compiler {
 		attrName = attrName.replace('@', '');
 		let eventArr = attrName.split('.');
 		eventType = eventArr.shift();
-		console.log(eventArr);
-		node.addEventListener(
-			eventType,
-			(e) => {
-				window[value]();
-				if (eventArr.indexOf('stop')) {
-					e.stopPropagation();
-				}
-				if (eventArr.indexOf('prevent')) {
-					e.preventDefault();
-				}
-			},
-			true
-		);
+		node.addEventListener(eventType, (e) => {
+			this.methods[value]();
+			if (eventArr.indexOf('stop') > -1) {
+				e.stopPropagation();
+			}
+			if (eventArr.indexOf('prevent') > -1) {
+				e.preventDefault();
+			}
+		});
 	}
 	// 处理文本节点
 	compileText(node) {

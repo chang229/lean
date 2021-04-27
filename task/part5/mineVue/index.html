@@ -18,7 +18,7 @@
 			<h1>v-on</h1>
 			<div v-on:click="fatherClick">
 				<p>p</p>
-				<div v-on:click="handelClick">点击</div>
+				<div v-on:click.stop="handelClick">点击</div>
 				<div @click="handelClick">点击</div>
 			</div>
 			<h1>v-model</h1>
@@ -39,12 +39,14 @@
 				html: '<span style="color:red">html</span>',
 			},
 			el: '#app',
+			methods: {
+				handelClick(event) {
+					console.log('click');
+				},
+				fatherClick(event) {
+					console.log('father');
+				},
+			},
 		});
-		function fatherClick() {
-			console.log('father');
-		}
-		function handelClick() {
-			console.log('click');
-		}
 	</script>
 </html>
