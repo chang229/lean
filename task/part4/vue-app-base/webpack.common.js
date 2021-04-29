@@ -28,11 +28,22 @@ module.exports = {
 			},
 			{
 				test: /\.less$/,
-				use: [process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+				use: [
+					process.env.NODE_ENV !== 'production'
+						? 'style-loader'
+						: MiniCssExtractPlugin.loader,
+					'css-loader',
+					'less-loader',
+				],
 			},
 			{
 				test: /\.css$/,
-				use: [process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
+				use: [
+					process.env.NODE_ENV !== 'production'
+						? 'style-loader'
+						: MiniCssExtractPlugin.loader,
+					'css-loader',
+				],
 			},
 			{
 				test: /\.(jpg|png|jpeg|gif)$/,
