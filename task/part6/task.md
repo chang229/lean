@@ -47,21 +47,15 @@
 
 #### 4、请简述 Vue 中模板编译的过程
 
-- 缓存公共的 mount 函数，并重写浏览器平台的 mount
+- Vue的编译功能主要是将template字符串模板编译生成render函数，render函数的功能是用js创建Dom。
 
-- 判断是否传入了 render 函数，没有的话，是否传入了 template ，没有的话，则获取 el 节点的 outerHTML 作为 template
+- 首先createCompilerCreator函数 传入 baseCompile 函数参数，直接返回 createCompiler 函数并赋值给createCompiler 变量。 createCompiler函数传入 baseOptions 执行 返回compile 对象。直接把编译主体功能分离出来，通过入参传给 createCompilerCreator函数，科里化返回 createCompiler
 
-- 调用 baseCompile 函数
+- 调用 baseCompile 函数,baseCompile功能是分三步处理template字符串模板:(1),parse 函数将其转化成AST 树
+(2),optimize函数优化AST树，如删除一些无用的虚拟Dom;(3),generate 函数将优化好的AST树，转化成代码字符串
 
-- 解析器(parse) 将模板字符串的模板编译转换成 AST 抽象语法树
+- createCompiler函数处理 baseOptions 配置选项 及 调用baseCompile 函数，返回compile函数和通过createCompileToFunctionFn 函数把rende 及 staticRenderFns 字符串代码转化成函数的对象。
 
-- 优化器(optimize) - 对 AST 进行静态节点标记，主要用来做虚拟DOM的渲染优化
+- createCompileToFunctionFn函数通过 new function(codeString) ，把字符串格式的代码转化成程序代码,并返回。
 
-- 通过 generate 将 AST 抽象语法树转换为 render 函数的 js 字符串
-
-- 将 render 函数 通过 createFunction 函数 转换为 一个可以执行的函数
-
-- 将 最后的 render 函数 挂载到 option 中
- 
-- 执行 公共的 mount 函数
 
