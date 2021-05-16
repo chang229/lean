@@ -27,20 +27,17 @@ module.exports = merge(common, {
 				},
 			],
 		}),
-        new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
-        })
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+		}),
 	],
-    optimization: {
-        minimizer: [
-            new TerserWebpackPlugin(),
-            new CssMinimizerPlugin(),
-        ],
-        usedExports:true,
-        concatenateModules:true,
-        minimize:true,
-        splitChunks: {
-            chunks: 'all'
-        }
-    },
+	optimization: {
+		minimizer: [new TerserWebpackPlugin(), new CssMinimizerPlugin()],
+		usedExports: true,
+		concatenateModules: true,
+		minimize: true,
+		splitChunks: {
+			chunks: 'all',
+		},
+	},
 });
