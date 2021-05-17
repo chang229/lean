@@ -6,6 +6,7 @@ import cart from './modules/cart'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  strict:process.env.NODE_ENV !== 'production',
   state: {
       count:0,
       msg:'hello world'

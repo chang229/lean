@@ -26,6 +26,8 @@
     <button @click="$store.commit('changeProducts',[])">product</button> -->
     <div>products:{{products}}</div>
     <button @click="changeProducts([])">product</button>
+    <h1>strict</h1>
+    <button @click="$store.state.msg = 'ceshi'">strict</button>
   </div>
 </template>
 <script>
