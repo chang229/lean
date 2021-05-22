@@ -1,7 +1,7 @@
 
 /* eslint-disable */
 const state = {
-  cartList: []
+  cartList: JSON.parse(localStorage.getItem('cart') || '[]')
 }
 const getters = {
     totalCount(state){
@@ -9,6 +9,22 @@ const getters = {
     },
     totalPrice(state){
         return state.cartList.reduce((sum,prod) => sum + prod.totalPrice,0)
+    },
+    checkCount(state){
+        return state.cartList.reduce((sum,prod) => {
+            if(prod.checked){
+                sum += prod.count
+            }
+            return sum;
+        },0)
+    },
+    checkPrice(state){
+        return state.cartList.reduce((sum,prod) => {
+            if(prod.checked){
+                sum += prod.totalPrice
+            }
+            return sum;
+        },0)
     }
 }
 const mutations = {
@@ -38,6 +54,13 @@ const mutations = {
         let prod = state.cartList.find((item) => item.id ===id)
         if(prod){
             prod.checked = checked
+        }
+    },
+    updateCart(state,{id,count}){
+        let prod = state.cartList.find((item) => item.id === id);
+        if(prod){
+            prod.count = count;
+            prod.totalPrice = prod.price * prod.count
         }
     }
 }

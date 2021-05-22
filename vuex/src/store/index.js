@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+// import Vuex from 'vuex'
+import Vuex from '../myVuex/index';
 import products from './modules/productes'
 import cart from './modules/cart'
 

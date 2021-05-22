@@ -39,8 +39,8 @@
       <el-table-column
         prop="count"
         label="数量">
-        <template>
-          <el-input-number size="mini"></el-input-number>
+        <template v-slot="scope">
+          <el-input-number :value="scope.row.count" @change="updateCart({id:scope.row.id,count:$event})" size="mini"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column
@@ -55,19 +55,20 @@
       </el-table-column>
     </el-table>
     <div>
-      <p>已选 <span>xxx</span> 件商品，总价：<span>xxx</span></p>
+      <p>已选 <span>{{ checkCount }}</span> 件商品，总价：<span>{{ checkPrice }}</span></p>
       <el-button type="danger">结算</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'Cart',
   computed:{
       ...mapState('cart',['cartList']),
+      ...mapGetters('cart',['checkCount','checkPrice']),
       checkedAll:{
           get(){
               return this.cartList.every((item) => item.checked)
@@ -78,7 +79,7 @@ export default {
       }
   },
   methods:{
-      ...mapMutations('cart',['checkAllProd','checkItem'])
+      ...mapMutations('cart',['checkAllProd','checkItem','updateCart'])
   }
 }
 </script>
