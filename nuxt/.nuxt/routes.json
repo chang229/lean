@@ -1,8 +1,14 @@
 [
   {
+    "name": "about",
+    "path": "/about",
+    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\about.vue",
+    "chunkName": "pages/about"
+  },
+  {
     "name": "index",
     "path": "/",
-    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
+    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
     "chunkName": "pages/index"
   }
 ]
