@@ -4,9 +4,11 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _3e00242a = () => interopDefault(import('..\\pages\\about.vue' /* webpackChunkName: "pages/about" */))
-const _bc741328 = () => interopDefault(import('..\\pages\\user\\_id.vue' /* webpackChunkName: "pages/user/_id" */))
-const _5db7feef = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _51181ba3 = () => interopDefault(import('..\\pages\\about.vue' /* webpackChunkName: "pages/about" */))
+const _04ff15b6 = () => interopDefault(import('..\\pages\\user.vue' /* webpackChunkName: "pages/user" */))
+const _7c408886 = () => interopDefault(import('..\\pages\\user\\index.vue' /* webpackChunkName: "pages/user/index" */))
+const _1e98ed36 = () => interopDefault(import('..\\pages\\user\\_id.vue' /* webpackChunkName: "pages/user/_id" */))
+const _70cff668 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -14,22 +16,30 @@ Vue.use(Router)
 
 export const routerOptions = {
   mode: 'history',
-  base: '/',
+  base: '/dist/',
   linkActiveClass: 'nuxt-link-active',
   linkExactActiveClass: 'nuxt-link-exact-active',
   scrollBehavior,
 
   routes: [{
     path: "/about",
-    component: _3e00242a,
+    component: _51181ba3,
     name: "about"
   }, {
-    path: "/user/:id?",
-    component: _bc741328,
-    name: "user-id"
+    path: "/user",
+    component: _04ff15b6,
+    children: [{
+      path: "",
+      component: _7c408886,
+      name: "user"
+    }, {
+      path: ":id",
+      component: _1e98ed36,
+      name: "user-id"
+    }]
   }, {
     path: "/",
-    component: _5db7feef,
+    component: _70cff668,
     name: "index"
   }],
 
