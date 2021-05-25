@@ -2,13 +2,22 @@
   {
     "name": "about",
     "path": "/about",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\about.vue",
-    "chunkName": "pages/about"
+    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\about.vue",
+    "chunkName": "pages/about",
+    "_name": "_3e00242a"
+  },
+  {
+    "name": "user-id",
+    "path": "/user/:id?",
+    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\user\\\\_id.vue",
+    "chunkName": "pages/user/_id",
+    "_name": "_bc741328"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_5db7feef"
   }
 ]

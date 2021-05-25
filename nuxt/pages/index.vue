@@ -1,19 +1,19 @@
 <template>
-    <div>
-        <h1>hello world</h1>
-        <a href="/about">about</a>
-        <NuxtLink to="/about">about</NuxtLink>
-        <button @click="to">about</button>
-    </div>
+	<div>
+		<h1>hello world</h1>
+		<a href="/about">about</a>
+		<nuxt-link to="/about">about</nuxt-link>
+		<button @click="to">about</button>
+	</div>
 </template>
 
 <script>
 export default {
-    name:"index",
-    methods:{
-        to(){
-            this.$router.push('/about')
-        }
-    }
-}
+	name: 'index',
+	methods: {
+		to() {
+			this.$router.push('/about');
+		},
+	},
+};
 </script>
