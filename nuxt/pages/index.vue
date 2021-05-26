@@ -1,19 +1,24 @@
 <template>
 	<div>
-		<h1>hello world</h1>
-		<a href="/about">about</a>
-		<nuxt-link to="/about">about</nuxt-link>
-		<button @click="to">about</button>
+		<h1>{{ title }}</h1>
+        <ul>
+            <li v-for="item in posts" :key="item.id">
+                <nuxt-link :to="'/article/' + item.id">{{item.title}}</nuxt-link>
+            </li>
+        </ul>
 	</div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	name: 'index',
-	methods: {
-		to() {
-			this.$router.push('/about');
-		},
-	},
+	async asyncData() {
+        let res = await axios({
+            methods:'get',
+            url:'http://localhost:3000/data.json'
+        })
+        return res.data
+    },
 };
 </script>

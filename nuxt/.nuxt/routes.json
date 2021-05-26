@@ -29,6 +29,13 @@
     "_name": "_04ff15b6"
   },
   {
+    "name": "article-id",
+    "path": "/article/:id?",
+    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\article\\\\_id.vue",
+    "chunkName": "pages/article/_id",
+    "_name": "_0d3c75de"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
