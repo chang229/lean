@@ -1,41 +1,5 @@
 [
   {
-    "name": "about",
-    "path": "/about",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\about.vue",
-    "chunkName": "pages/about",
-    "_name": "_51181ba3"
-  },
-  {
-    "path": "/user",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\user.vue",
-    "chunkName": "pages/user",
-    "children": [
-      {
-        "name": "user",
-        "path": "",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\user\\\\index.vue",
-        "chunkName": "pages/user/index",
-        "_name": "_7c408886"
-      },
-      {
-        "name": "user-id",
-        "path": ":id",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\user\\\\_id.vue",
-        "chunkName": "pages/user/_id",
-        "_name": "_1e98ed36"
-      }
-    ],
-    "_name": "_04ff15b6"
-  },
-  {
-    "name": "article-id",
-    "path": "/article/:id?",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\article\\\\_id.vue",
-    "chunkName": "pages/article/_id",
-    "_name": "_0d3c75de"
-  },
-  {
     "name": "index",
     "path": "/",
     "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\index.vue",

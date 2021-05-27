@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<h1>{{ title }}</h1>
-        <ul>
-            <li v-for="item in posts" :key="item.id">
-                <nuxt-link :to="'/article/' + item.id">{{item.title}}</nuxt-link>
-            </li>
-        </ul>
+		<h1>首页</h1>
 	</div>
 </template>
 
@@ -13,12 +8,5 @@
 import axios from 'axios';
 export default {
 	name: 'index',
-	async asyncData() {
-        let res = await axios({
-            methods:'get',
-            url:'http://localhost:3000/data.json'
-        })
-        return res.data
-    },
 };
 </script>

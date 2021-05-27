@@ -4,11 +4,6 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _51181ba3 = () => interopDefault(import('..\\pages\\about.vue' /* webpackChunkName: "pages/about" */))
-const _04ff15b6 = () => interopDefault(import('..\\pages\\user.vue' /* webpackChunkName: "pages/user" */))
-const _7c408886 = () => interopDefault(import('..\\pages\\user\\index.vue' /* webpackChunkName: "pages/user/index" */))
-const _1e98ed36 = () => interopDefault(import('..\\pages\\user\\_id.vue' /* webpackChunkName: "pages/user/_id" */))
-const _0d3c75de = () => interopDefault(import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages/article/_id" */))
 const _70cff668 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -23,26 +18,6 @@ export const routerOptions = {
   scrollBehavior,
 
   routes: [{
-    path: "/about",
-    component: _51181ba3,
-    name: "about"
-  }, {
-    path: "/user",
-    component: _04ff15b6,
-    children: [{
-      path: "",
-      component: _7c408886,
-      name: "user"
-    }, {
-      path: ":id",
-      component: _1e98ed36,
-      name: "user-id"
-    }]
-  }, {
-    path: "/article/:id?",
-    component: _0d3c75de,
-    name: "article-id"
-  }, {
     path: "/",
     component: _70cff668,
     name: "index"
