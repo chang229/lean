@@ -10,7 +10,7 @@ module.exports = {
                 component: resolve(__dirname, 'pages/layout/index.vue'),
                 children:[
                     {
-                        name:'layoutIndex',
+                        name:'home',
                         path:'',
                         component:resolve(__dirname,'pages/home/index.vue')
                     },
@@ -47,5 +47,6 @@ module.exports = {
                 ]
             }])
         }
-    }
+    },
+    plugins:['@/plugins/http.js','@/plugins/dayjs.js']
 }

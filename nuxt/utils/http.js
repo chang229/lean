@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const Axios = axios.create({
     baseURL:'https://conduit.productionready.io',
-    timeout: 1000,
     method:'post'
 })
 
@@ -18,6 +17,7 @@ Axios.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 Axios.interceptors.response.use(function (response) {
+        console.log(response)
         // 对响应数据做点什么
         return response.data;
     }, function (error) {

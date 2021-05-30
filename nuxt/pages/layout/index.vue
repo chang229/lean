@@ -9,22 +9,22 @@
                         <!-- Add "active" class when you're on that page" -->
                         <nuxt-link class="nav-link" exact to="/">Home</nuxt-link>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="user">
                         <nuxt-link class="nav-link" to="/editor"><i class="ion-compose"></i>&nbsp;New Post</nuxt-link>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="user">
                         <nuxt-link class="nav-link" to="/settings"><i class="ion-gear-a"></i>&nbsp;Settings</nuxt-link>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="!user">
                         <nuxt-link class="nav-link" to="/login">Sign in</nuxt-link>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="!user">
                         <nuxt-link class="nav-link" to="/register">Sign up</nuxt-link>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="user">
                         <nuxt-link class="nav-link" to="/profile/123">
-                            <img class="user-pic" src="http://toutiao.meiduo.site/FtNcS8sKFSYQbtBbd40eFTL6lAs_" alt="">
-                            <span>lpz999</span>
+                            <img class="user-pic" :src="user.image" alt="">
+                            <span>{{ user.username }}</span>
                         </nuxt-link>
                     </li>
                 </ul>
@@ -43,7 +43,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
-    name:'layout'
+    name:'layout',
+    computed:{
+        ...mapState(['user'])
+    }
 }
 </script>

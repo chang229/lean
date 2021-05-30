@@ -5,7 +5,7 @@
     "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
     "children": [
       {
-        "name": "layoutIndex",
+        "name": "home",
         "path": "",
         "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue",
         "_name": "_8b5203ae"

@@ -34,6 +34,7 @@ import {signIn,register} from '@/utils/api.js';
 const Cookie = process.client ? require('js-cookie') : undefined;
 
 export default {
+    middleware:'notAuthenticated',
     name:'loginReagist',
     data(){
         return {

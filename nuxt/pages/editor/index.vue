@@ -29,6 +29,7 @@
 </template>
 <script>
 export default {
+    middleware:'authenticated',
     name:'editor'
 }
 </script>

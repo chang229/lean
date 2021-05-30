@@ -30,7 +30,7 @@ export const routerOptions = {
     children: [{
       path: "",
       component: _8b5203ae,
-      name: "layoutIndex"
+      name: "home"
     }, {
       path: "/login",
       component: _fefc43ba,
