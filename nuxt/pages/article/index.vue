@@ -47,7 +47,7 @@
 						</div>
 						<div class="card-footer">
 							<img
-								src="http://i.imgur.com/Qr71crq.jpg"
+								:src="user.image"
 								class="comment-author-img"
 							/>
 							<button
@@ -205,6 +205,18 @@ export default {
 			});
 		},
 	},
+    head() {
+      return {
+        title: `${this.article.title} - realworld`,
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: this.article.description
+          }
+        ]
+      }
+    },
 	components: {
 		author,
 	},

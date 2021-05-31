@@ -2,51 +2,51 @@
   {
     "name": "layout",
     "path": "/",
-    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
+    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
     "children": [
       {
         "name": "home",
         "path": "",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue",
-        "_name": "_70824570"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue",
+        "_name": "_8b5203ae"
       },
       {
         "name": "login",
         "path": "/login",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
-        "_name": "_e0810088"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
+        "_name": "_fefc43ba"
       },
       {
         "name": "register",
         "path": "/register",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
-        "_name": "_e0810088"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
+        "_name": "_fefc43ba"
       },
       {
         "name": "profile",
         "path": "/profile/:username",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\profile\\\\index.vue",
-        "_name": "_708e72bc"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\profile\\\\index.vue",
+        "_name": "_3a32d363"
       },
       {
         "name": "settings",
         "path": "/settings",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\settings\\\\index.vue",
-        "_name": "_8b97bda8"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\settings\\\\index.vue",
+        "_name": "_251bd565"
       },
       {
         "name": "editor",
         "path": "/editor",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue",
-        "_name": "_1ab1923c"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue",
+        "_name": "_1a30a55b"
       },
       {
         "name": "article",
         "path": "/article/:slug",
-        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\article\\\\index.vue",
-        "_name": "_163b0d4f"
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\article\\\\index.vue",
+        "_name": "_40412414"
       }
     ],
-    "_name": "_5d6dd505"
+    "_name": "_f6117904"
   }
 ]
