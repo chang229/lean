@@ -1,23 +1,52 @@
 [
   {
-    "name": "about",
-    "path": "/about",
-    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\about.vue",
-    "chunkName": "pages/about",
-    "_name": "_3e00242a"
-  },
-  {
-    "name": "user-id",
-    "path": "/user/:id?",
-    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\user\\\\_id.vue",
-    "chunkName": "pages/user/_id",
-    "_name": "_bc741328"
-  },
-  {
-    "name": "index",
+    "name": "layout",
     "path": "/",
-    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_5db7feef"
+    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
+    "children": [
+      {
+        "name": "home",
+        "path": "",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue",
+        "_name": "_8b5203ae"
+      },
+      {
+        "name": "login",
+        "path": "/login",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
+        "_name": "_fefc43ba"
+      },
+      {
+        "name": "register",
+        "path": "/register",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
+        "_name": "_fefc43ba"
+      },
+      {
+        "name": "profile",
+        "path": "/profile/:username",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\profile\\\\index.vue",
+        "_name": "_3a32d363"
+      },
+      {
+        "name": "settings",
+        "path": "/settings",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\settings\\\\index.vue",
+        "_name": "_251bd565"
+      },
+      {
+        "name": "editor",
+        "path": "/editor",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue",
+        "_name": "_1a30a55b"
+      },
+      {
+        "name": "article",
+        "path": "/article/:slug",
+        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\article\\\\index.vue",
+        "_name": "_40412414"
+      }
+    ],
+    "_name": "_f6117904"
   }
 ]

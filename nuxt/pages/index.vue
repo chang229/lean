@@ -1,19 +1,12 @@
 <template>
 	<div>
-		<h1>hello world</h1>
-		<a href="/about">about</a>
-		<nuxt-link to="/about">about</nuxt-link>
-		<button @click="to">about</button>
+		<h1>首页</h1>
 	</div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	name: 'index',
-	methods: {
-		to() {
-			this.$router.push('/about');
-		},
-	},
 };
 </script>
