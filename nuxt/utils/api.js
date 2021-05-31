@@ -93,3 +93,11 @@ export const delFollow = (params) =>
 		method: 'delete',
 		url: `api/profiles/${params}/follow`,
 	});
+
+// 设置个人信息
+export const settingUser = (params) =>
+	Axios({
+		method: 'put',
+		url: '/api/ersu',
+		data: params,
+	});
