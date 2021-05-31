@@ -2,51 +2,43 @@
   {
     "name": "layout",
     "path": "/",
-    "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
+    "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\layout\\\\index.vue",
     "children": [
       {
         "name": "home",
         "path": "",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue",
-        "_name": "_8b5203ae"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\home\\\\index.vue"
       },
       {
         "name": "login",
         "path": "/login",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
-        "_name": "_fefc43ba"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue"
       },
       {
         "name": "register",
         "path": "/register",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue",
-        "_name": "_fefc43ba"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\login\\\\index.vue"
       },
       {
         "name": "profile",
         "path": "/profile/:username",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\profile\\\\index.vue",
-        "_name": "_3a32d363"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\profile\\\\index.vue"
       },
       {
         "name": "settings",
         "path": "/settings",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\settings\\\\index.vue",
-        "_name": "_251bd565"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\settings\\\\index.vue"
       },
       {
         "name": "editor",
         "path": "/editor",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue",
-        "_name": "_1a30a55b"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue"
       },
       {
         "name": "article",
         "path": "/article/:slug",
-        "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\article\\\\index.vue",
-        "_name": "_40412414"
+        "component": "D:\\\\chdcode\\\\lean\\\\nuxt\\\\pages\\\\article\\\\index.vue"
       }
-    ],
-    "_name": "_f6117904"
+    ]
   }
 ]
