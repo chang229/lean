@@ -1,57 +1,99 @@
-class Promise {
-	constructor(extrect) {
-		this.state = 'pending';
-		this.value = '';
-		this.reason = '';
-		this.onFuilledCallbacks = [];
-		this.onRejectedCallbacks = [];
-		let resolve = (value) => {
-			if (this.state === 'pending') {
-				this.state = 'fulFilled';
-				this.value = value;
-				this.onFuilledCallbacks.forEach((fn) => fn());
-			}
-		};
-		let reject = (reason) => {
-			if (this.state === 'pending') {
-				this.state = 'rejected';
-				this.reason = reason;
-				this.onRejectedCallbacks.forEach((fn) => fn());
-			}
-		};
+class Mypromise {
+	constructor(exector) {
 		try {
-			extrect(resolve, reject);
-		} catch (err) {
-			reject(err);
+			exector(this.resolve, this.rejected);
+		} catch (e) {
+			this.rejected(e);
 		}
 	}
-	then(onFuilled, onRejected) {
-		if (this.state === 'fulFilled') {
-			onFuilled(this.value);
+	// promise状态
+	status = 'pending';
+	// promise成功的返回值
+	value = '';
+	// promise失败的返回值
+	reason = '';
+	// 成功的回调函数
+	successCallback = [];
+	// 失败的回调函数
+	errorCallback = [];
+
+	resolve = (value) => {
+		if (this.status === 'pending') {
+			this.status = 'fulfilled';
+			this.value = value;
+			this.successCallback.forEach((v) => v());
 		}
-		if (this.state === 'rejected') {
-			onRejected(this.reason);
+	};
+
+	rejected = (reason) => {
+		if (this.status === 'pending') {
+			this.status = 'rejected';
+			this.reason = reason;
+			this.errorCallback.forEach((v) => v());
 		}
-		if (this.state === 'pending') {
-			this.onFuilledCallbacks.push(() => onFuilled(this.value));
-			this.onRejectedCallbacks.push(() => onRejected(this.reason));
+	};
+
+	then(successCallback, errorCallback) {
+		successCallback = successCallback ? successCallback : (value) => value;
+		errorCallback = errorCallback
+			? errorCallback
+			: (reason) => {
+					throw reason;
+			  };
+		let promise2 = new Mypromise((resolve, rejected) => {
+			if (this.status === 'fulfilled') {
+				setTimeout(() => {
+					try {
+						let x = successCallback(this.value);
+						this.resolvePromise(promise2, x, resolve, rejected);
+					} catch (e) {
+						rejected(e);
+					}
+				}, 0);
+			}
+			if (this.status === 'rejected') {
+				setTimeout(() => {
+					try {
+						let x = errorCallback(this.reason);
+						this.resolvePromise(promise2, x, resolve, rejected);
+					} catch (e) {
+						rejected(e);
+					}
+				}, 0);
+			}
+			if (this.status === 'pending') {
+				this.successCallback.push(() => {
+					setTimeout(() => {
+						try {
+							let x = successCallback(this.value);
+							this.resolvePromise(promise2, x, resolve, rejected);
+						} catch (e) {
+							rejected(e);
+						}
+					}, 0);
+				});
+				this.errorCallback.push(() => {
+					setTimeout(() => {
+						try {
+							let x = errorCallback(this.reason);
+							this.resolvePromise(promise2, x, resolve, rejected);
+						} catch (e) {
+							rejected(e);
+						}
+					}, 0);
+				});
+			}
+		});
+		return promise2;
+	}
+
+	resolvePromise(promise2, x, resolve, rejected) {
+		if (promise2 === x) {
+			throw new Erroe('promise对象被循环引用');
 		}
+		if (x instanceof Mypromise) {
+			return x.then(resolve, rejected);
+		}
+		return resolve(x);
 	}
 }
-
-let p = new Promise((resolve, reject) => {
-	setTimeout(() => {
-		resolve('success');
-	}, 1000);
-	// resolve('success');
-	// reject('error');
-});
-
-p.then(
-	(res) => {
-		console.log(res);
-	},
-	(err) => {
-		console.log(err);
-	}
-);
