@@ -103,8 +103,9 @@ export const settingUser = (params) =>
 	});
 
 //更新个人信息
-export const updateUser = (params) => Axios({
-    method:'put',
-    url:'/api/user',
-    data:params
-})
+export const updateUser = (params) =>
+	Axios({
+		method: 'put',
+		url: '/api/user',
+		data: params,
+	});

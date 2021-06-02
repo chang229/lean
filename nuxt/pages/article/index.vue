@@ -46,10 +46,7 @@
 							></textarea>
 						</div>
 						<div class="card-footer">
-							<img
-								:src="user.image"
-								class="comment-author-img"
-							/>
+							<img :src="user.image" class="comment-author-img" />
 							<button
 								class="btn btn-sm btn-primary"
 								:disabled="!commentText"
@@ -128,10 +125,12 @@ import markdownIt from 'markdown-it';
 export default {
 	name: 'article',
 	async asyncData({ params, store }) {
-		let res = await getArticle(params.slug);
+		let [res, comments] = await Promise.all([
+			getArticle(params.slug),
+			getComments(params.slug),
+		]);
 		let md = new markdownIt();
 		res.article.body = md.render(res.article.body);
-		let comments = await getComments(params.slug);
 		res.article.favoritedabled = false;
 		res.article.followabled = false;
 		return { ...res, ...comments, user: store.state.user };
@@ -205,18 +204,18 @@ export default {
 			});
 		},
 	},
-    head() {
-      return {
-        title: `${this.article.title} - realworld`,
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: this.article.description
-          }
-        ]
-      }
-    },
+	head() {
+		return {
+			title: `${this.article.title} - realworld`,
+			meta: [
+				{
+					hid: 'description',
+					name: 'description',
+					content: this.article.description,
+				},
+			],
+		};
+	},
 	components: {
 		author,
 	},

@@ -4,13 +4,14 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _f6117904 = () => interopDefault(import('..\\pages\\layout\\index.vue' /* webpackChunkName: "" */))
-const _8b5203ae = () => interopDefault(import('..\\pages\\home\\index.vue' /* webpackChunkName: "" */))
-const _fefc43ba = () => interopDefault(import('..\\pages\\login\\index.vue' /* webpackChunkName: "" */))
-const _3a32d363 = () => interopDefault(import('..\\pages\\profile\\index.vue' /* webpackChunkName: "" */))
-const _251bd565 = () => interopDefault(import('..\\pages\\settings\\index.vue' /* webpackChunkName: "" */))
-const _1a30a55b = () => interopDefault(import('..\\pages\\editor\\index.vue' /* webpackChunkName: "" */))
-const _40412414 = () => interopDefault(import('..\\pages\\article\\index.vue' /* webpackChunkName: "" */))
+const _163b0d4f = () => interopDefault(import('..\\pages\\article\\index.vue' /* webpackChunkName: "pages/article/index" */))
+const _1ab1923c = () => interopDefault(import('..\\pages\\editor\\index.vue' /* webpackChunkName: "pages/editor/index" */))
+const _70824570 = () => interopDefault(import('..\\pages\\home\\index.vue' /* webpackChunkName: "pages/home/index" */))
+const _5d6dd505 = () => interopDefault(import('..\\pages\\layout\\index.vue' /* webpackChunkName: "pages/layout/index" */))
+const _e0810088 = () => interopDefault(import('..\\pages\\login\\index.vue' /* webpackChunkName: "pages/login/index" */))
+const _708e72bc = () => interopDefault(import('..\\pages\\profile\\index.vue' /* webpackChunkName: "pages/profile/index" */))
+const _8b97bda8 = () => interopDefault(import('..\\pages\\settings\\index.vue' /* webpackChunkName: "pages/settings/index" */))
+const _5db7feef = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -19,43 +20,42 @@ Vue.use(Router)
 export const routerOptions = {
   mode: 'history',
   base: '/',
-  linkActiveClass: 'active',
+  linkActiveClass: 'nuxt-link-active',
   linkExactActiveClass: 'nuxt-link-exact-active',
   scrollBehavior,
 
   routes: [{
+    path: "/article",
+    component: _163b0d4f,
+    name: "article"
+  }, {
+    path: "/editor",
+    component: _1ab1923c,
+    name: "editor"
+  }, {
+    path: "/home",
+    component: _70824570,
+    name: "home"
+  }, {
+    path: "/layout",
+    component: _5d6dd505,
+    name: "layout"
+  }, {
+    path: "/login",
+    component: _e0810088,
+    name: "login"
+  }, {
+    path: "/profile",
+    component: _708e72bc,
+    name: "profile"
+  }, {
+    path: "/settings",
+    component: _8b97bda8,
+    name: "settings"
+  }, {
     path: "/",
-    component: _f6117904,
-    name: "layout",
-    children: [{
-      path: "",
-      component: _8b5203ae,
-      name: "home"
-    }, {
-      path: "/login",
-      component: _fefc43ba,
-      name: "login"
-    }, {
-      path: "/register",
-      component: _fefc43ba,
-      name: "register"
-    }, {
-      path: "/profile/:username",
-      component: _3a32d363,
-      name: "profile"
-    }, {
-      path: "/settings",
-      component: _251bd565,
-      name: "settings"
-    }, {
-      path: "/editor",
-      component: _1a30a55b,
-      name: "editor"
-    }, {
-      path: "/article/:slug",
-      component: _40412414,
-      name: "article"
-    }]
+    component: _5db7feef,
+    name: "index"
   }],
 
   fallback: false
