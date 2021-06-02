@@ -116,3 +116,10 @@ export const getUserInfo = (params) =>
 		method: 'get',
 		url: `/api/profiles/${params}`,
 	});
+
+// 发布文章
+export const pubArticle = (params) => Axios({
+    method:'post',
+    url:'/api/articles',
+    data:params
+}) 

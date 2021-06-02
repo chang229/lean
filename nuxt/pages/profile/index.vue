@@ -10,9 +10,10 @@
 						<button
 							v-if="profile.username !== user.username"
 							class="btn btn-sm btn-outline-secondary action-btn"
+                            :disabled="followabled"
+                            @click="followHandel"
 						>
-							<i class="ion-plus-round"></i>&nbsp;Follow Eric
-							Simons
+							<i class="ion-plus-round"></i>&nbsp;{{profile.following ? 'Unfollow' : 'Follow'}} {{profile.username}}
 						</button>
 						<nuxt-link
 							v-if="profile.username === user.username"
@@ -31,13 +32,13 @@
 					<div class="articles-toggle">
 						<ul class="nav nav-pills outline-active">
 							<li class="nav-item">
-								<a class="nav-link active" href=""
-									>My Articles</a
+								<div class="nav-link" :class="{active:tab ==='my'}" style="cursor:pointer" @click="fetchArticles('my')"
+									>My Articles</div
 								>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href=""
-									>Favorited Articles</a
+								<div class="nav-link" :class="{active:tab ==='favorited'}" style="cursor:pointer" @click="fetchArticles('favorited')"
+									>Favorited Articles</div
 								>
 							</li>
 						</ul>
@@ -48,57 +49,28 @@
 						:key="item.slug"
 					>
 						<div class="article-meta">
-							<a href=""
-								><img src="http://i.imgur.com/Qr71crq.jpg"
-							/></a>
+							<nuxt-link :to="{name:'profile',params:{username:item.author.username}}"
+								><img :src="item.author.image"
+							/></nuxt-link>
 							<div class="info">
-								<a href="" class="author">Eric Simons</a>
-								<span class="date">January 20th</span>
+								<nuxt-link :to="{name:'profile',params:{username:item.author.username}}" class="author">{{item.author.username}}</nuxt-link>
+								<span class="date">{{item.createdAt | dateFormat('MMM DD,YYYY')}}</span>
 							</div>
 							<button
 								class="btn btn-outline-primary btn-sm pull-xs-right"
+                                :class="{active:item.favorited}" 
+                                :disabled="item.favoriteAbled"
+                                @click="favorite(item)"
 							>
-								<i class="ion-heart"></i> 29
+								<i class="ion-heart"></i> {{item.favoritesCount}}
 							</button>
 						</div>
-						<a href="" class="preview-link">
-							<h1>How to build webapps that scale</h1>
-							<p>This is the description for the post.</p>
+						<nuxt-link :to="{name:'article',params:{slug:item.slug}}" class="preview-link">
+							<h1>{{item.title}}</h1>
+							<p>{{item.description}}</p>
 							<span>Read more...</span>
-						</a>
+						</nuxt-link>
 					</div>
-					<!-- <div class="article-preview">
-						<div class="article-meta">
-							<a href=""
-								><img src="http://i.imgur.com/N4VcUeJ.jpg"
-							/></a>
-							<div class="info">
-								<a href="" class="author">Albert Pai</a>
-								<span class="date">January 20th</span>
-							</div>
-							<button
-								class="btn btn-outline-primary btn-sm pull-xs-right"
-							>
-								<i class="ion-heart"></i> 32
-							</button>
-						</div>
-						<a href="" class="preview-link">
-							<h1>
-								The song you won't ever stop singing. No matter
-								how hard you try.
-							</h1>
-							<p>This is the description for the post.</p>
-							<span>Read more...</span>
-							<ul class="tag-list">
-								<li class="tag-default tag-pill tag-outline">
-									Music
-								</li>
-								<li class="tag-default tag-pill tag-outline">
-									Song
-								</li>
-							</ul>
-						</a>
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -106,7 +78,7 @@
 </template>
 
 <script>
-import { getUserInfo, getArticles } from '@/utils/api.js';
+import { getUserInfo, getArticles,delFavorite,addFavorite,delFollow,addFollow } from '@/utils/api.js';
 import { mapState } from 'vuex';
 export default {
 	middleware: 'authenticated',
@@ -118,23 +90,73 @@ export default {
 	data() {
 		return {
 			articles: [],
+            tab:'my',
+            pending:false,
+            followabled:false,
 		};
 	},
 	mounted() {
-		this.fetchArticles();
+		this.fetchArticles(this.tab);
 	},
 	methods: {
 		// 获取文章列表
-		fetchArticles() {
-			getArticles({
-				author: this.profile.username,
-				limit: 5,
+		fetchArticles(type) {
+            if(this.pending) return;
+            this.pending = true;
+            this.articles = [];
+            this.tab = type;
+            let params = {
+                limit: 5,
 				offset: 0,
-			}).then((res) => {
-				res.articles.forEach((v) => {
-					this.articles.push(v);
+            }
+            if(type === 'my'){
+				params.author = this.profile.username;
+            }
+            if(type === 'favorited'){
+                params.favorited = this.profile.username;
+            }
+			getArticles(params).then((res) => {
+                res.articles.forEach((v) => {
+                    v.favoriteAbled = false;
+                })
+                this.articles = res.articles;
+                this.pending = false;
+			}).catch(() => {
+                this.pending = false;
+            })
+		},
+        // 点赞
+        favorite(item) {
+			item.favoriteAbled = true;
+			if (item.favorited) {
+				delFavorite(item.slug).then(() => {
+					item.favorited = false;
+					item.favoritesCount -= 1;
+					item.favoriteAbled = false;
 				});
-			});
+			} else {
+				addFavorite(item.slug).then(() => {
+					item.favorited = true;
+					item.favoritesCount += 1;
+					item.favoriteAbled = false;
+				});
+			}
+		},
+        //follow事件
+		followHandel() {
+			let { profile } = this;
+			this.followabled = true;
+			if (profile.following) {
+				delFollow(profile.username).then(() => {
+					profile.following = false;
+					this.followabled = false;
+				});
+			} else {
+				addFollow(profile.username).then(() => {
+					profile.following = true;
+					this.followabled = false;
+				});
+			}
 		},
 	},
 	computed: {
