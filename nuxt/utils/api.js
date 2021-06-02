@@ -109,3 +109,10 @@ export const updateUser = (params) =>
 		url: '/api/user',
 		data: params,
 	});
+
+// 获取个人信息
+export const getUserInfo = (params) =>
+	Axios({
+		method: 'get',
+		url: `/api/profiles/${params}`,
+	});

@@ -33,7 +33,13 @@
 						>
 					</li>
 					<li class="nav-item" v-if="user">
-						<nuxt-link class="nav-link" to="/profile/123">
+						<nuxt-link
+							class="nav-link"
+							:to="{
+								name: 'profile',
+								params: { username: user.username },
+							}"
+						>
 							<img class="user-pic" :src="user.image" alt="" />
 							<span>{{ user.username }}</span>
 						</nuxt-link>

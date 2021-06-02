@@ -4,21 +4,23 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12 col-md-10 offset-md-1">
-						<img
-							src="http://i.imgur.com/Qr71crq.jpg"
-							class="user-img"
-						/>
-						<h4>Eric Simons</h4>
-						<p>
-							Cofounder @GoThinkster, lived in Aol's HQ for a few
-							months, kinda looks like Peeta from the Hunger Games
-						</p>
+						<img :src="profile.image" class="user-img" />
+						<h4>{{ profile.username }}</h4>
+						<p>{{ profile.bio }}</p>
 						<button
+							v-if="profile.username !== user.username"
 							class="btn btn-sm btn-outline-secondary action-btn"
 						>
 							<i class="ion-plus-round"></i>&nbsp;Follow Eric
 							Simons
 						</button>
+						<nuxt-link
+							v-if="profile.username === user.username"
+							class="btn btn-sm btn-outline-secondary action-btn"
+							to="/settings"
+						>
+							<i class="ion-gear-a"></i> Edit Profile Settings
+						</nuxt-link>
 					</div>
 				</div>
 			</div>
@@ -40,7 +42,11 @@
 							</li>
 						</ul>
 					</div>
-					<div class="article-preview">
+					<div
+						class="article-preview"
+						v-for="item in articles"
+						:key="item.slug"
+					>
 						<div class="article-meta">
 							<a href=""
 								><img src="http://i.imgur.com/Qr71crq.jpg"
@@ -61,7 +67,7 @@
 							<span>Read more...</span>
 						</a>
 					</div>
-					<div class="article-preview">
+					<!-- <div class="article-preview">
 						<div class="article-meta">
 							<a href=""
 								><img src="http://i.imgur.com/N4VcUeJ.jpg"
@@ -92,7 +98,7 @@
 								</li>
 							</ul>
 						</a>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -100,8 +106,39 @@
 </template>
 
 <script>
+import { getUserInfo, getArticles } from '@/utils/api.js';
+import { mapState } from 'vuex';
 export default {
 	middleware: 'authenticated',
 	name: 'profile',
+	async asyncData({ params }) {
+		let res = await getUserInfo(params.username);
+		return { ...res };
+	},
+	data() {
+		return {
+			articles: [],
+		};
+	},
+	mounted() {
+		this.fetchArticles();
+	},
+	methods: {
+		// 获取文章列表
+		fetchArticles() {
+			getArticles({
+				author: this.profile.username,
+				limit: 5,
+				offset: 0,
+			}).then((res) => {
+				res.articles.forEach((v) => {
+					this.articles.push(v);
+				});
+			});
+		},
+	},
+	computed: {
+		...mapState(['user']),
+	},
 };
 </script>
