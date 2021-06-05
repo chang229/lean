@@ -42,7 +42,17 @@
 								/>
 								<div class="tag-list"></div>
 							</fieldset>
+                            <button 
+                                v-if="params && params.slug"
+                                class="btn btn-lg pull-xs-right btn-primary"
+								type="button"
+                                @click.prevent="renewArticle"
+                                :disabled="pending"
+                            >
+                                Update Article
+                            </button>
 							<button
+                                v-else
 								class="btn btn-lg pull-xs-right btn-primary"
 								type="button"
                                 @click.prevent="postArticle"
@@ -58,10 +68,15 @@
 	</div>
 </template>
 <script>
-import { pubArticle } from '@/utils/api.js'
+import { pubArticle, getArticle, updateArticle } from '@/utils/api.js'
 export default {
 	middleware: 'authenticated',
 	name: 'editor',
+    asyncData({ params }) {
+        return {
+            params,
+        }
+    },
     data(){
         return {
             pending:false,
@@ -73,15 +88,51 @@ export default {
             }
         }
     },
+    created(){
+        if(this.params && this.params.slug){
+            getArticle(this.params.slug).then((res) => {
+                let { article } = res;
+                this.article = {
+                    body:article.body,
+                    description:article.description,
+                    tag:article.tagList.join(','),
+                    title:article.title
+                }
+            })
+        }
+    },
     methods:{
         // 发布文章
         postArticle(){
-            let { article } = this;
+            let { article,pending } = this;
+            if(pending) return;
+            this.pending = true;
             if(article.tag){
                 article.tagList = article.tag.split(',')
             }
             pubArticle(article).then((res) => {
+                this.pending = false;
                 this.$router.push(`/article/${res.article.slug}`)
+            }).catch(() => {
+                this.pending = false;
+            })
+        },
+        // 更新文章
+        renewArticle(){
+            let { article,params,pending } = this;
+            if(pending) return;
+            this.pending = true;
+            if(article.tag){
+                article.tagList = article.tag.split(',')
+            }
+            updateArticle({
+                slug:params.slug,
+                data:{article,}
+            }).then(() => {
+                this.pending = false;
+                this.$router.push(`/article/${params.slug}`)
+            }).catch(() => {
+                this.pending = false;
             })
         }
     }

@@ -34,7 +34,7 @@
 					@followHandel="followHandel"
 				></author>
 			</div>
-			<div class="row">
+			<div class="row" v-if="user">
 				<div class="col-xs-12 col-md-8 offset-md-2">
 					<form class="card comment-form">
 						<div class="card-block">

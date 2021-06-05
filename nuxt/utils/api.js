@@ -122,4 +122,17 @@ export const pubArticle = (params) => Axios({
     method:'post',
     url:'/api/articles',
     data:params
-}) 
+})
+
+// 删除文章
+export const delArticle = (params) => Axios({
+    method:'delete',
+    url:`/api/articles/${params}`
+})
+
+// 修改文章
+export const updateArticle = (params) => Axios({
+    method:'put',
+    url:`/api/articles/${params.slug}`,
+    data:params.data
+})

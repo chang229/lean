@@ -53,7 +53,7 @@ module.exports = {
 							},
 							{
 								name: 'editor',
-								path: '/editor',
+								path: '/editor/:slug?',
 								component: resolve(
 									__dirname,
 									'pages/editor/index.vue'

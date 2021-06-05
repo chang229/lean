@@ -36,7 +36,7 @@
       },
       {
         "name": "editor",
-        "path": "/editor",
+        "path": "/editor/:slug?",
         "component": "D:\\\\code\\\\lean\\\\nuxt\\\\pages\\\\editor\\\\index.vue",
         "_name": "_1a30a55b"
       },

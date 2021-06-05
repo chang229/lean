@@ -22,31 +22,42 @@
 				articleInfo.createdAt | dateFormat('MMM DD,YYYY')
 			}}</span>
 		</div>
-		<button
-			class="btn btn-sm btn-outline-secondary"
-			:class="{ active: articleInfo.author.following }"
-			@click="follow"
-		>
-			<i class="ion-plus-round"></i>&nbsp;{{
-				articleInfo.author.following ? 'Unfollow' : 'Follow'
-			}}
-			{{ articleInfo.author.username }}
-			<!-- <span class="counter" v-if="articleInfo.author.following"
-				>(10)</span
-			> -->
-		</button>
-		&nbsp;&nbsp;
-		<button
-			class="btn btn-sm btn-outline-primary"
-			:class="{ active: articleInfo.favorited }"
-			@click="favorite"
-		>
-			<i class="ion-heart"></i>&nbsp;Favorite Post
-			<span class="counter">({{ articleInfo.favoritesCount }})</span>
-		</button>
+        <template v-if="articleInfo.author.username === user.username">
+            <nuxt-link class="btn btn-outline-secondary btn-sm"  :to="{name:'editor',params:{slug:articleInfo.slug}}">
+                <i class="ion-edit"></i> Edit Article
+            </nuxt-link>
+            <button class="btn btn-outline-danger btn-sm" @click="deleteArticle">
+                <i class="ion-trash-a"></i> Delete Article
+            </button>
+        </template>
+        <template v-else>
+            <button
+                class="btn btn-sm btn-outline-secondary"
+                :class="{ active: articleInfo.author.following }"
+                @click="follow"
+            >
+                <i class="ion-plus-round"></i>&nbsp;{{
+                    articleInfo.author.following ? 'Unfollow' : 'Follow'
+                }}
+                {{ articleInfo.author.username }}
+                <!-- <span class="counter" v-if="articleInfo.author.following"
+                    >(10)</span
+                > -->
+            </button>
+		    &nbsp;&nbsp;
+            <button
+                class="btn btn-sm btn-outline-primary"
+                :class="{ active: articleInfo.favorited }"
+                @click="favorite"
+            >
+                <i class="ion-heart"></i>&nbsp;Favorite Post
+                <span class="counter">({{ articleInfo.favoritesCount }})</span>
+            </button>
+        </template>
 	</div>
 </template>
 <script>
+import {delArticle} from '@/utils/api.js';
 export default {
 	name: 'author',
 	data() {
@@ -85,6 +96,17 @@ export default {
 				return;
 			}
 		},
+        // 删除文章
+        deleteArticle(){
+            if(this.pendding) return;
+            this.pendding = true;
+            delArticle(this.articleInfo.slug).then(() => {
+                this.pendding = false;
+                this.$router.replace('/')
+            }).catch(() => {
+                this.pendding = false;
+            })
+        }
 	},
 };
 </script>
