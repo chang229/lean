@@ -1,18 +1,37 @@
 {
   "publicPath": "/dist/",
   "all": [
-    "app.82a9632f3892f8ab9c88.js"
+    "app.65b1c223ffdfeccb317f.js",
+    "app.65b1c223ffdfeccb317f.js.map"
   ],
-  "initial": [],
-  "async": [
-    "app.82a9632f3892f8ab9c88.js"
+  "initial": [
+    "app.65b1c223ffdfeccb317f.js"
   ],
+  "async": [],
   "modules": {
-    "a576adba": [
-      0
+    "967802dc": [
+      0,
+      1
     ],
-    "6fbc4fdc": [
-      0
+    "421b46cc": [
+      0,
+      1
+    ],
+    "61bb5d6a": [
+      0,
+      1
+    ],
+    "6e78d7c5": [
+      0,
+      1
+    ],
+    "6a8017c6": [
+      0,
+      1
+    ],
+    "19e637ba": [
+      0,
+      1
     ]
   }
 }

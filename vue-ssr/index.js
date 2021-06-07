@@ -1,23 +1,36 @@
 const Vue = require('vue');
 const fs = require('fs');
-const renderer = require('vue-server-renderer').createRenderer({
-    template:fs.readFileSync('./index.html','utf-8')
-});
 const express = require('express');
+const setupDevServer = require('./build/setup-dev-server');
+const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
+
+const isProd = process.env.NODE_ENV === 'production';
 
 const serve = express();
 
-serve.get('/',(req,res) => {
-    const app = new Vue({
-        template:`
-            <div id="app">{{ message }}</div>
-        `,
-        data:{
-            message:'你好，世界'
-        }
+serve.use('/dist',express.static('./dist'));
+
+let renderer,onReady;
+if(isProd){
+    const serverBundle = require('./dist/vue-ssr-server-bundle.json');
+    const template = fs.readFileSync('./index.html','utf-8');
+    const clientManifest = require('./dist/vue-ssr-client-manifest.json');
+    renderer = createBundleRenderer(serverBundle,{
+        template,
+        clientManifest
+    });
+}else{
+    onReady = setupDevServer(serve,(serverBundle,template,clientManifest) => {
+        render = createBundleRenderer(serverBundle,{
+            template,
+            clientManifest
+        })
     })
-    
-    renderer.renderToString(app,{
+}
+
+
+let render = (req,res) => {
+    renderer.renderToString({
         title:'indexpage',
         mate:'<mate name="description" content="index" />'
     },(err,html) => {
@@ -28,7 +41,9 @@ serve.get('/',(req,res) => {
         res.setHeader('Content-Type','text/html;charset=utf-8')
         res.end(html)
     })
-})
+}
+
+serve.get('/', isProd ? render : async (req,res) => { await onReady;render()})
 
 serve.listen(3000,() => {
     console.log('serve in running...')
