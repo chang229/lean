@@ -43,7 +43,7 @@ let render = (req,res) => {
     })
 }
 
-serve.get('/', isProd ? render : async (req,res) => { await onReady;render()})
+serve.get('/', isProd ? render : async (req,res) => { await onReady;render(req,res)})
 
 serve.listen(3000,() => {
     console.log('serve in running...')
