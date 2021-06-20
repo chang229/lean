@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const chokidar = require('chokidar');
 const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const hotMiddleware = require('webpack-hot-middleware');
 
 const resolve = file => path.resolve(__dirname,file);
 
@@ -39,6 +40,12 @@ module.exports = (serve,callback) => {
     })
     // 监视构建 clientManifest，调用 update 更新 Renderer
     const clientConfig = require('./webpack.client.config.js');
+    // clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+    // clientConfig.entry.app = [
+    //     'webpack-hot-middleware/client?reload=true&noInfo=true',
+    //     clientConfig.entry.app
+    // ]
+    // clientConfig.output.filename = '[name].js'
     const clientCompiler = webpack(clientConfig);
     const clientMiddleware = webpackDevMiddleware(clientCompiler,{
         // logLevel:'slient' // 关闭默认日志

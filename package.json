@@ -27,5 +27,7 @@
     "loadsh": "0.0.4",
     "lodash": "^4.17.21"
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-gyp": "^8.1.0"
+  }
 }

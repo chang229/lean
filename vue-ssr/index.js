@@ -32,7 +32,8 @@ if(isProd){
 let render = (req,res) => {
     renderer.renderToString({
         title:'indexpage',
-        mate:'<mate name="description" content="index" />'
+        mate:'<mate name="description" content="index" />',
+        url:req.url
     },(err,html) => {
         if(err){
             res.status(500).end(err);
@@ -43,7 +44,7 @@ let render = (req,res) => {
     })
 }
 
-serve.get('/', isProd ? render : async (req,res) => { await onReady;render(req,res)})
+serve.get('*', isProd ? render : async (req,res) => { await onReady;render(req,res)})
 
 serve.listen(3000,() => {
     console.log('serve in running...')
