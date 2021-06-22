@@ -28,6 +28,8 @@
     "lodash": "^4.17.21"
   },
   "dependencies": {
+    "@vue/cli-service-global": "^4.5.13",
+    "global": "^4.4.0",
     "node-gyp": "^8.1.0"
   }
 }

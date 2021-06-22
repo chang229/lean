@@ -1,0 +1,19 @@
+<template>
+    <div>
+        <label>{{label}}</label>
+        <div>
+            <slot></slot>
+            <p></p>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    name:'lgFormItem',
+    props:{
+        label:{
+            type:String
+        }
+    }
+}
+</script>
