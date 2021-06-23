@@ -5,6 +5,19 @@
 </template>
 <script>
 export default {
-    name:'lgForm'
+    name:'lgForm',
+    provide(){
+        return {
+            form:this
+        }
+    },
+    props:{
+        model:{
+            type:Object
+        },
+        rules:{
+            type:Object
+        }
+    }
 }
 </script>
