@@ -18,6 +18,12 @@ export default {
         rules:{
             type:Object
         }
+    },
+    methods:{
+        validate(cb){
+            const tasks = this.$children.filter(item => item.prop).map(item => item.validate());
+            Promise.all(tasks).then(() => cb(true),() => cb(false)).catch(() => cb(false))
+        }
     }
 }
 </script>

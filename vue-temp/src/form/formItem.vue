@@ -8,7 +8,7 @@
     </div>
 </template>
 <script>
-import asyncValidator from 'async-validator';
+import AsyncValidator from 'async-validator';
 export default {
     name:'lgFormItem',
     inject:['form'],
@@ -25,6 +25,11 @@ export default {
             errMsg:''
         }
     },
+    mounted(){
+        this.$on('validate',() => {
+            this.validate()
+        })
+    },
     methods:{
         validate(){
             if (!this.prop) return;
@@ -34,9 +39,9 @@ export default {
             const validator = new AsyncValidator(descriptor)
             return validator.validate({ [this.prop]: value }, errors => {
                 if (errors) {
-                    this.errMessage = errors[0].message
+                    this.errMsg = errors[0].message
                 } else {
-                    this.errMessage = ''
+                    this.errMsg = ''
                 }
             })
         }

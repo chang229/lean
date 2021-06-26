@@ -18,7 +18,21 @@ export default {
     },
     methods:{
         handelIpt(event){
-            this.$emit('input',event.target.value)
+            this.$emit('input',event.target.value);
+            let parent = this.findParent(this.$parent);
+            if(parent){
+                parent.$emit('validate')
+            }
+        },
+        findParent(parent){
+            while(parent){
+                if(parent.$options.name === 'lgFormItem'){
+                    break;
+                }else{
+                    parent = parent.$parent;
+                }
+            }
+            return parent;
         }
     }
 }

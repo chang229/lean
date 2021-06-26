@@ -49,15 +49,14 @@ export default {
   methods: {
     login () {
       console.log('button')
-      return false
-      // this.$refs.form.validate(valid => {
-      //   if (valid) {
-      //     alert('验证成功')
-      //   } else {
-      //     alert('验证失败')
-      //     return false
-      //   }
-      // })
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          alert('验证成功')
+        } else {
+          alert('验证失败')
+          return false
+        }
+      })
     }
   },
   components:{
