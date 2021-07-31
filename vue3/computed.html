@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button>添加添加</button>
+        <p>{{ count }}</p>
+    </div>
+</body>
+<script type="module">
+    import { createApp, reactive, computed } from './node_modules/vue/dist/vue.esm-browser.js'
+    const data = [
+      { text: '看书', completed: false },
+      { text: '敲代码', completed: false },
+      { text: '约会', completed: true }
+    ]
+
+    createApp({
+        setup(){
+            const dataList = reactive(data)
+
+            const count = computed(() => {
+                return dataList.filter((v) => !v.completed).length
+            })
+
+            return {
+                count
+            }
+        }
+    }).mount('#app')
+</script>
+</html>

@@ -7,7 +7,44 @@
     <title>Document</title>
 </head>
 <body>
-    <div>hello world</div>
+    <div id="app">
+        <p>x:{{x}}</p>
+        <p>y:{{y}}</p>
+    </div>
 </body>
-<script type="module" src="./module/index.js"></script>
+<script type="module">
+    import { createApp, reactive, onMounted, onUnmounted, toRefs } from './node_modules/vue/dist/vue.esm-browser.js';
+
+    // 定义监听鼠标移动事件
+    function useMoveHandel(){
+        const position = reactive({
+            x:0,
+            y:0
+        })
+        const mouseMoveHandel = (e) => {
+            position.x = e.pageX;
+            position.y = e.pageY
+        }
+        onMounted(() => {
+            window.addEventListener('mousemove',mouseMoveHandel)
+        })
+
+        onUnmounted(() => {
+            window.removeEventListener('mousemove',mouseMoveHandel)
+        })
+
+        return toRefs(position);
+    }
+
+    let app = createApp({
+        setup(){
+            const {x,y} = useMoveHandel()
+            return {
+                x,y
+            }
+        },
+    })
+
+    app.mount('#app')
+</script>
 </html>

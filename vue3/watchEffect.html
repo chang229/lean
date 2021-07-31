@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="add">加加加</button>
+        <button @click=stop>停止</button>
+        <p>{{ count }}</p>
+    </div>
+</body>
+<script type="module">
+    import { createApp, ref, watchEffect } from './node_modules/vue/dist/vue.esm-browser.js';
+
+    createApp({
+        setup(){
+            const count = ref(0);
+            let stop = watchEffect(() => {
+                console.log(count.value)
+            })
+
+            return {
+                count,
+                stop,
+                add:() => {
+                    count.value ++
+                }
+            }
+        }
+    }).mount('#app')
+</script>
+</html>

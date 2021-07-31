@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="add">加加加</button>
+        <p>{{ count }}</p>
+    </div>
+</body>
+<script type="module">
+    import { createApp, ref } from './node_modules/vue/dist/vue.esm-browser.js';
+    function countHandel(){
+        const count = ref(0);
+        return {
+            count,
+            add:() => {
+                console.log('999')
+                count.value++
+            }
+        }
+    }
+
+    createApp({
+        setup(){
+            return {
+                ...countHandel()
+            }
+        }
+    }).mount('#app')
+</script>
+</html>

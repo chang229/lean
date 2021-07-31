@@ -1,4 +1,4 @@
-import {myEach} from './module';
+import {myEach} from './module.js';
 
 let arr = [1,2,3];
 myEach(arr,(v) => {
