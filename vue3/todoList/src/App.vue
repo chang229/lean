@@ -16,23 +16,22 @@
       <label for="toggle-all">Mark all as complete</label>
       <ul class="todo-list">
         <li
-          v-for="todo in filteredTodos"
+          v-for="todo in filterTodos"
           :key="todo"
           :class="{ editing: todo === editingTodo, completed: todo.completed }"
         >
           <div class="view">
             <input class="toggle" type="checkbox" v-model="todo.completed">
-            <label @dblclick="editTodo(todo)">{{ todo.text }}</label>
-            <button class="destroy" @click="remove(todo)"></button>
+            <label @dblclick="double(todo)">{{ todo.text }}</label>
+            <button class="destroy" @click="removeTodo(todo)"></button>
           </div>
           <input
             class="edit"
             type="text"
-            v-editing-focus="todo === editingTodo"
             v-model="todo.text"
-            @keyup.enter="doneEdit(todo)"
-            @blur="doneEdit(todo)"
-            @keyup.esc="cancelEdit(todo)"
+            v-edit-focus="todo === editingTodo"
+            @keyup.esc="escClick(todo)"
+            @keyup.enter="entryClick(todo)"
             >
         </li>
       </ul>
@@ -46,168 +45,169 @@
         <li><a href="#/active">Active</a></li>
         <li><a href="#/completed">Completed</a></li>
       </ul>
-      <button class="clear-completed" @click="removeCompleted" v-show="count > remainingCount">
+      <button class="clear-completed" @click="removeCompleted" v-if="count > remainingCount">
         Clear completed
       </button>
     </footer>
   </section>
-  <footer class="info">
-    <p>Double-click to edit a todo</p>
-    <!-- Remove the below line ↓ -->
-    <p>Template by <a href="http://sindresorhus.com">Sindre Sorhus</a></p>
-    <!-- Change this out with your name and url ↓ -->
-    <p>Created by <a href="https://www.lagou.com">教瘦</a></p>
-    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-  </footer>
 </template>
 
 <script>
-import './assets/index.css'
+import './assets/index.css';
 import useLocalStorage from './utils/useLocalStorage'
-import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 
-const storage = useLocalStorage()
+const storage = useLocalStorage();
 
-// 1. 添加待办事项
-const useAdd = todos => {
-  const input = ref('')
-  const addTodo = () => {
-    const text = input.value && input.value.trim()
-    if (text.length === 0) return
-    todos.value.unshift({
-      text,
-      completed: false
+// 添加todo
+const addTodos = (todos) => {
+    const input = ref('');
+    const addTodo = () => {
+        console.log(input.value)
+        const text = input.value.trim();
+        if(text){
+            todos.value.unshift({
+                text,
+                completed:false,
+            })
+            input.value = ''
+        }
+    };
+
+    return {
+        input,
+        addTodo
+    }
+}
+
+// 删除todo
+const delTodo = (todos) => {
+    const removeTodo = (todo) => {
+        let index = todos.value.indexOf(todo);
+        todos.value.splice(index,1)
+    }
+
+    const removeCompleted = () => {
+        todos.value = todos.value.filter((item) => !item.completed)
+    }
+    return {
+        removeTodo,
+        removeCompleted
+    }
+}
+
+// 编辑todo
+const editTodo = (removeTodo) => {
+    const editingTodo = ref(null);
+    let beforeEditText = '';
+    // 双击
+    const double = (todo) => {
+        editingTodo.value = todo;
+        beforeEditText = todo.text;
+    }
+    // 退出编辑
+    const escClick = (todo) => {
+        editingTodo.value = null;
+        todo.text = beforeEditText
+    }
+    // 编辑完成
+    const entryClick = (todo) => {
+        if(!todo.text){
+            removeTodo(todo)
+            return;
+        }
+        todo.text = todo.text.trim();
+        editingTodo.value = null;
+    }
+
+    return {
+        editingTodo,
+        double,
+        escClick,
+        entryClick
+    }
+}
+
+// 切换todos的状态
+const changeStatus = (todos) => {
+    const allDone = computed({
+        get(){
+            return todos.value.every((item) => item.completed)
+        },
+        set(value){
+            todos.value.forEach((item) => {
+                item.completed = value
+            })
+        }
+    });
+    
+    const filter = {
+        all:list => list,
+        active:list => list.filter((item) => !item.completed),
+        completed:list => list.filter((item) => item.completed)
+    }
+    const filterTodos = computed({
+        get(){
+            return filter[type.value](todos.value)
+        }
     })
-    input.value = ''
-  }
-  return {
-    input,
-    addTodo
-  }
-}
-
-// 2. 删除待办事项
-const useRemove = todos => {
-  const remove = todo => {
-    const index = todos.value.indexOf(todo)
-    todos.value.splice(index, 1)
-  }
-  const removeCompleted = () => {
-    todos.value = todos.value.filter(todo => !todo.completed)
-  }
-  return {
-    remove,
-    removeCompleted
-  }
-}
-
-// 3. 编辑待办项
-const useEdit = remove => {
-  let beforeEditingText = ''
-  const editingTodo = ref(null)
-
-  const editTodo = todo => {
-    beforeEditingText = todo.text
-    editingTodo.value = todo
-  }
-  const doneEdit = todo => {
-    if (!editingTodo.value) return
-    todo.text = todo.text.trim()
-    todo.text || remove(todo)
-    editingTodo.value = null
-  }
-  const cancelEdit = todo => {
-    editingTodo.value = null
-    todo.text = beforeEditingText
-  }
-  return {
-    editingTodo,
-    editTodo,
-    doneEdit, 
-    cancelEdit
-  }
-}
-
-// 4. 切换待办项完成状态
-const useFilter = todos => {
-  const allDone = computed({
-    get () {
-      return !todos.value.filter(todo => !todo.completed).length
-    },
-    set (value) {
-      todos.value.forEach(todo => {
-        todo.completed = value
-      })
+    const remainingCount = computed(() => filter.active(todos.value).length)
+    const count = computed(() => todos.value.length)
+    const type = ref('all');
+    const hashChange = () => {
+        let hash = window.location.hash.replace('#/','');
+        console.log(hash)
+        if(hash){
+            type.value = hash
+        }else{
+            type.value = 'all'
+        }
     }
-  })
 
-  const filter = {
-    all: list => list,
-    active: list => list.filter(todo => !todo.completed),
-    completed: list => list.filter(todo => todo.completed)
-  }
-  const type = ref('all')
-  const filteredTodos = computed(() => filter[type.value](todos.value))
-  const remainingCount = computed(() => filter.active(todos.value).length)
-  const count = computed(() => todos.value.length)
+    onMounted(() => {
+        window.addEventListener('hashchange',hashChange)
+    })
 
-  const onHashChange = () => {
-    const hash = window.location.hash.replace('#/', '')
-    if (filter[hash]) {
-      type.value = hash
-    } else {
-      type.value = 'all'
-      window.location.hash = ''
+    onUnmounted(() => {
+        window.removeEventListener('hashchange',hashChange)
+    })
+
+    return {
+        allDone,
+        filterTodos,
+        remainingCount,
+        count
     }
-  }
-
-  onMounted(() => {
-    window.addEventListener('hashchange', onHashChange)
-    onHashChange()
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('hashchange', onHashChange)
-  })
-
-  return {
-    allDone,
-    count,
-    filteredTodos,
-    remainingCount
-  }
 }
 
-// 5. 存储待办事项
-const useStorage = () => {
-  const KEY = 'TODOKEYS'
-  const todos = ref(storage.getItem(KEY) || [])
-  watchEffect(() => {
-    storage.setItem(KEY, todos.value)
-  })
-  return todos
+// 缓存todos
+const saveTodos = () => {
+    const todos = ref(storage.getItem('todos') || []);
+    watchEffect(() => {
+        storage.setItem('todos',todos.value)
+    })
+
+    return todos;
 }
 
 export default {
   name: 'App',
-  setup () {
-    const todos = useStorage()
-
-    const { remove, removeCompleted } = useRemove(todos)
-
+  setup(){
+    const todos = saveTodos();
+    const { removeTodo, removeCompleted } = delTodo(todos);
     return {
-      todos,
-      remove,
-      removeCompleted,
-      ...useAdd(todos),
-      ...useEdit(remove),
-      ...useFilter(todos)
+        todos,
+        removeTodo,
+        removeCompleted,
+        ...addTodos(todos),
+        ...editTodo(removeTodo),
+        ...changeStatus(todos)
     }
   },
-  directives: {
-    editingFocus: (el, binding) => {
-      binding.value && el.focus()
-    }
+  directives:{
+      editFocus:(el,binding) => {
+          binding.value && el.focus()
+      }
   }
 }
 </script>
