@@ -1,12 +1,12 @@
 <template>
-  <div class="home">首页</div>
+  <div class="user">用户管理</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'HomeIndex'
+  name: 'UserIndex'
 })
 </script>
 
